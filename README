@@ -1,0 +1,452 @@
+README for the RicksWM Window Manager V4 ----- $Revision: 1.10 $
+
+note: Make sure you have the X11::Protocol module installed.
+      A .tgz file for it is included, or get it from CPAN.
+
+To build RicksWM:
+
+unpack into new directory: 
+
+  tar zxvf RicksWM-x.xx.xx.tar.gz
+  cd RicksWM-x.xx.xx
+
+check Makefile for installation location (/usr/local/bin by default)
+and edit if desired, then:
+
+  make
+  make install
+
+to start as second X session:
+
+  ./go         # (see below if permission problems)
+
+
+More detail--------------------------------------
+
+To start RicksWM as a second window manager when another
+is already running:
+
+  xinit ./RicksWM -- :1 -bpp 32
+
+  or
+
+  xinit ./RicksWM -- :1 -ac
+
+Note: To switch between running X window managers, use
+CNTL-ALT-F7  and  CNTL-ALT-F8
+
+Note: Depending on the version of X, -bpp may not be needed, or
+may cause an error. Also, the -ac flag (at the end) may be needed to
+disable authorization.
+
+To start RicksWM as the only window manager (see 'man xinit' for
+an explanation):
+
+  xinit ./RicksWM -- -bpp 32
+
+
+I use a 'Rwm' file in my home directory to start a single X session:
+
+  ./Rwm
+
+My Rwm contains:
+
+  echo quick syntax check...
+  perl -wc /usr/local/bin/RicksWM || exit
+  echo starting RicksWM >log.wm
+  date >>log.wm
+  exec xinit $HOME/.Rwmrc -- -bpp 32
+
+This runs '.Rwmrc' as the xinit process. where I have uncommented
+the xhost command because my machine is safe within a local
+network. Other programs may be started within the .Rwmrc
+file, and will be decorated by the window manager as it starts.
+(See 'man xinit'.) Programs may also be started later, after RicksWM
+is up, by putting them in the ~/.initRKrc file, the advantage of
+this is that they will have the environment variables set by RicksWM.
+
+My .Rwmrc contains:
+
+  xhost +
+  localmenuRK.sh
+  exec /usr/local/bin/RicksWM
+
+
+Some things are configurable, check the config hash
+at the top of the program.
+
+
+Once RicksWM is up, here's how to use it:
+
+Actions:
+
+  in a window frame (decoration):
+
+    left button press - raise
+    left button drag - move
+    left button in resize triangle (lower left or right) - resize
+
+    middle button (no motion) - lower window
+    middle button (move left or right before release) - max horizontal window
+    middle button (move up or down before release) - max vertical window
+
+    right button - close window unless pointer moved outside stopsign
+
+    cntl-alt-right button - kill (extreme close only if necessary)
+
+    press&hold left button then tap middle button - maximize vertically
+      and if the left edge of the window is off the screen to the
+      left, put the left edge at the left edge of the screen
+
+  in the background (gesturing or stillness):
+
+    Each mouse button can run one of five programs depending on the
+    direction the cursor is moved while the button is pressed.
+    A small circle with radial lines all drawn with dashes shows the
+    limits of stillness while a button is pressed.
+
+    In the perl version config section, for example,
+
+      gesture_2_left  => 'utilRK backward #prev WS',
+
+    means that when mouse button 2 is pressed in the background
+    and then the cursor is moved outside the "stillness circle" to
+    the left and then released, the external program
+
+      utilRK backward
+
+    will be run. The text after the # will be displayed through
+    the center of the dashed circle.
+
+    The four directions used are up, down, left, & right.
+    If the cursor is not moved "gesture_size" from the start,
+    then 'still' will be used as follows:
+
+      gesture_1_still => 'xterm +sb -fn 10x20 -bg black -fg white #Xterm',
+
+    runs an xterm when the button is just clicked.
+
+
+    alt-middle button - exit window manager
+
+
+Possible Procedural actions:
+
+  Since no icons are provided, instead grab top of frame and slide
+  it all the way down to the bottom, it won't go off the bottom.
+  Cycle through these "icons" using the middle button (for 'lower').
+
+  Side edges, though thin, can also be used to raise and move
+  frames.
+
+  Since only the bottom corners allow resizing, I do moves by
+  using the lower border next to a resize triangle, That way I
+  don't have to move the mouse very far.
+
+  RicksWM now follows the sizing hints that clients can set. This
+  can be seen by noticing the jumps when resizing an xterm. Also,
+  some clients, like menuRK, will not resize because they have
+  set both maximum and minimum size to the same value.
+
+  To change options while RicksWM is running, send it a SIGHUP.
+  RicksWM sets the environment variable WMPID to easily determine
+  who to send signals to.  See the home.menuRKrc for an example
+  using kill(1). It will respond by reparenting existing windows to
+  the root window and then restarting, re-decorating the windows
+  to the new options.  This will also reload the key grabs from
+  ~/.grabRKrc . Restarting may change the window stacking order.
+
+  To change the key grabs, edit the file ~/.grabRKrc and send
+  a SIGWINCH:
+
+    kill -WINCH $WMPID
+
+Words on Multiple Workspaces
+
+  Workspaces have names. The names exist as a property of the
+  top level (decoration) windows that are managed by the Window
+  manager. The default workspace name exists as a property of the
+  root window, it's set by the utilRK program. When a new top level
+  window get decorated, it's assigned the current default workspace.
+
+  When RicksWM starts, the default workspace is named 'main'.
+  This parameter is in the RicksWM options section.
+
+  Change to a new default workspace name with
+
+    utilRK ws <name>
+
+  See the file 'localmenuRK.sh' for a menu I have to switch around
+  between common workspaces I use. Since it's "sticky", it appears
+  on every workspace.
+
+  The menu activated by middle-click shows both the workspace and
+  the window name, clicking on one of those entries will take you
+  to the named workspace with the named window on top.
+
+  There is a menu entry to find an unused workspace name and change
+  the default workspace to it.
+
+  There is also a menu entry to change the workspace that a
+  window belongs to. Change to the target workspace and select
+  'Pull Window to this Workspace...', and a new menu appears,
+  select the window (or windows - middle click) to move to this
+  workspace.
+
+  Any window that belongs to the 'sticky' workspace will appear
+  in all workspaces.
+
+  Eash workspace can have its own background color or pixmap.
+  The workspace color can be set as an option to utilRK. The
+  pixmap is defined in the file specified as the "tile_file"
+  option at the start of RicksWM.
+
+Focus Highlighting
+
+  RicksWM can now display the window with the current focus
+  differently from all the other windows. The 'blur' in the
+  configuration section refers to windows that are not in 'focus'.
+
+  If the color changing bothers you, just make the 'blur' and
+  'normal' colors the same. Also, remove the FocusChange
+  event mask from decoration windows.
+
+  There is now an option for using an .xpm file to "tile"
+  the frame and border for blurred windows.
+
+    blur_pixmap => '/pathto/water038.xpm',
+
+Note:
+
+  All windows that are not given specific starting coordinates
+  are started in the upper left corner.
+
+Bugs:
+
+  Only some geometry hints are used (so far).
+
+  The color map is ignored. 32-bit color is assumed.
+
+  Does not detect screen resolution change. You could restart with
+  SIGHUP to fix. However this may leave windows offscreen.
+
+Auxiliary Programs:
+
+  menuRK        - runs a menu
+  utilRK        - handles most aspects of multiple workspaces
+  fallRK        - draws non-permanent "something" on the root window.
+  gotoRK.pl     - uses menuRK to put up a navigation window
+
+
+  menuRK
+
+    RicksWM does not have internal menu capability. Instead, it relies on
+    an external program (written in C) for menu support.  I use 'middle
+    click' on the background to start this menu. (This is one example of
+    menuRK. It is a general menu program suitable for other uses, too.)
+    It comes up as a standard X window complete with decoration (unless
+    -or is specified).  Slide the cursor to the line you want, and
+    'middle click' to start the desired program while leaving the menu
+    up, or 'left click' to exec the desired program as a replacement
+    for the menu.
+
+    'Left click' makes it act as a single shot menu.
+
+    'Middle click' makes it act as a "pinned menu" or
+    "control panel".  It will stay up after a selection to
+    allow more selections.
+
+    "Single shot"/"pinned" mode can be forced with the -p switch.
+
+    Arguments:
+
+       -h                   print help
+       --help               "
+       --version            print version
+       -i cmdline           take one button info from arg
+       -f filename          take button info from file
+       -f -                 take button info from stdin(default)
+                            (multiple -f & -i may be used)
+       -fn font             use this font(default 10x20)
+       -c chars             chop strings to # of characters
+       -bg color            background color(default black)
+       -fg color            foreground color(default white)
+       -t title             window title (%s will be changed to
+                            current workspace name)
+       -l                   print selections instead of running them
+       -or                  set override-redirect bit(no decoration)
+       -e                   trigger on cursor entering item window
+       -center              center justify item labels
+       -right               right justify item labels
+       -midscreen           center menu in display
+       -cws fg bg           highlight current workspace name
+       -dialog              put all buttons along the bottom
+       -dialoggap pixels    gap between dialog buttons
+       -mr maxrows          limit number of rows
+       -minw minimumwidth   minimum item width in pixels
+       -ws workspacename    initial workspace
+       -p 1                 treat button 1 like button 2 (persist)
+       -p 2                 treat button 2 like button 1 (no persist)
+       -3 command           run command for button 3
+       -ipad pixels         internal vertical pad for items
+       -vpad pixels         vertical space between items
+       -hpad pixels         horizontal space between items
+       -shadow pixels       3D bevel size
+       -slant pixels        lean for buttons
+       -slantbg color       background color if slant used
+       -ul color            upper left bevel color
+       -lr color            lower right bevel color
+       -depress pixels      amount to shift active text
+       -active color color  active foreground & background colors
+       -clock               display clock if not focused
+       -timeout seconds     time to exit
+       -bell                ring bell on menu start
+       -notice              options for a Notice window
+       -task                options for a task window
+       -3d                  options for a 3d window
+       -push                save colors for temporary change
+       -pop                 restore colors from push
+       -drop programpath    enable drag&drop to program
+       -xy x y              initial position (otherwise cursor)
+       -geometry '+x+y'     "
+       cmdline              just like the -i option without the -i
+                            except that a cmdline without a # becomes
+                            cmdline #cmdline
+
+
+    If no file argument is given, stdin is read.
+
+    Multiple -f and -i (or just cmdline) arguments can be given.
+
+    If sub-menus are desired, simply run another menuRK
+    with a different information file (or stdin). This way
+    sub-menus can be "pinned" too.
+
+    Menu information lines have the following format:
+
+      shell-command #menu text
+
+    Lines without a '#' are ignored, except for lines
+    containing only the single words 'left', center',
+    or 'right', which cause the menu text to be aligned
+    appropriately.  Lines starting with a # can not be
+    selected, and the text may be used as a visual separator.
+
+    Dialog mode puts the buttons along the bottom. Use
+    lines starting with # for the dialog text.
+
+    For a pop-up dialog, use the -l switch to run menuRK as a sub-process
+    using qx() in perl, backticks in shell, or popen in C to read the
+    selected value instead of running a program.  The returned string
+    will be just the part to the left of the # with trailing white
+    space removed.  The -bell option may be used to warn the user if
+    the dialog is an alert.
+
+    While all buttons will be the same size, they can be different colors.
+    The "color" arguments (like -bg and -fg) establish the color for all
+    following buttons (until changed again). This means you should set up
+    the colors you want before defining any buttons. To temporarily change
+    a button color use -push to save all the existing colors, then make
+    a change, and then use -pop to restore the previous colors. Example:
+
+      menuRK -l white -push -fg cyan cyan -pop morewhite
+
+    If the -drop option if used, any button can be moved on top of
+    another button (with the left or middle mouse button), and upon
+    release the drop program will be called with two arguments, the
+    command for the moving button, and the command for the receiving
+    button. The program ddRK.pl is an example of using "drag and drop"
+    to move windows from one workspace to another, or change stacking
+    layout on the same workspace. The program gotoRK.pl sets up a
+    menu that has -drop enabled.
+
+  utilRK
+
+    This program handles almost all details involved with
+    multiple workspaces. It's used in several menu selections,
+    see the menu setup code.
+
+    It will provide information about windows and workspaces,
+    mostly in a form suitable for input into the menuRK
+    program.
+
+    It can also change workspaces, and move windows onto
+    a new workspace.
+
+      utilRK -h
+
+    will show all the options.
+
+    As a simple example, the following shell command would bring
+    up a menu with all the windows in all the workspaces, such
+    that clicking on a menu item would switch to that workspace
+    and raise the window to the top of the stack (except for the
+    "sticky" window).
+
+      utilRK listwithws | menuRK
+
+    'utilRK' generates a list exactly as 'menuRK' wants it, as
+    commands to itself to switch workspaces and raise windows.
+
+  xterm
+
+    I use 'left click' to start a new xterm (see config
+    section).  If you prefer a different terminal program,
+    change the config item.
+
+  gotoRK.pl
+
+    Displays a menuRK window with a row for each workspace and buttons
+    for the workspace and each window in that workspace,
+
+  ddRK.pl
+
+    Does "drag and drop" for gotoRK.pl.
+
+
+Configuration files used by RicksWM
+
+  ~/.menuRKrc - top part of middle button menu
+  ~/.grabRKrc - hotkey key grabs with command line
+  ~/.utilRKrc - holds map of colors to workspace names
+  ~/.tileRKrc - holds map of workspace names to .xpm files for tiling
+  ~/.initRKrc - commands to be run on initial start of RicksWM
+                (not run on restart)
+
+Other Files used by RicksWM (set up automatically)
+
+  /tmp/RicksWM.state:N - where N is the Xserver number (:N.0). This is the
+                         source of utilRK lists of information.
+                         It contains the current workspace name plus one
+                         tab separated line for each decorated window in
+                         top-to-bottom stacking order.
+
+  /tmp/RicksWM.cmd:N   - a fifo that utilRK used to talk to RicksWM
+
+
+Signals handled by RicksWM
+
+  SIGTERM  - does orderly shutdown
+  SIGINT   - does orderly shutdown
+  SIGHUP   - restarts RicksWM
+  SIGWINCH - reads ~/.grabRKrc to alter the key grabs
+  SIGUSR1  - logs stack of window IDs
+  SIGUSR2  - toggles solid or bare titles
+
+
+Environment variables set by RicksWM for programs it starts
+
+  WINDOWMANAGER=RicksWM
+  WMPID=<pid of RicksWM process>
+
+
+Note:
+
+  Most of these programs and scripts are put in /usr/local/bin
+  by 'make install'. Edit the Makefile if a different place is
+  desired.
+
+
+Good luck,
+Rick - rklement@pacbell.net
+
