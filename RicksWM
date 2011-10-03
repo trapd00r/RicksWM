@@ -46,7 +46,7 @@ my %config =
   border_blur_color   => 'blue',
   resize_marker_width => 20,
   bottom_size         => 14,
-  font                => '10x20',
+  font                => '6x13',
   text_pad            => 2,
   frame_border        => 2,
 
@@ -58,7 +58,7 @@ my %config =
   gesture_size    => 20,
 
   gesture_1_left  => '/home/rick/tasks.sh #Tasks',
-  gesture_1_still => 'xterm +sb -fn 10x20 -bg black -fg white #Xterm',
+  gesture_1_still => 'xterm #Xterm',
   gesture_1_right  => 'gotoRK.pl & #Workspaces',
 
   gesture_2_up    => 'utilRK ws main #main WS',
