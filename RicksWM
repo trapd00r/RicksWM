@@ -64,7 +64,7 @@ my %config =
   gesture_2_up    => 'utilRK ws main #main WS',
   gesture_2_left  => 'utilRK backward #prev WS',
   gesture_2_right => 'utilRK forward #next WS',
-  gesture_2_still => q( utilRK listnosticky | menuRK -t 'Select Command / Window to Raise' -3d -c 40 -ws sticky -f $HOME/.menuRKrc -f - & #Menu),
+  gesture_2_still => q( utilRK listnosticky | menuRK -t 'Select Command / Window to Raise' -3d -c 40 -ws sticky -f $XDG_CONFIG_HOME/rickswm/menuRKrc -f - & #Menu),
 
   gesture_3_still => 'utilRK bottom #Raise Bottom',
 
@@ -77,10 +77,10 @@ my %config =
 
   state_file => "/tmp/RicksWM.state@{[$ENV{DISPLAY}=~/.*(:\d+)/]}",
   cmd_file   => "/tmp/RicksWM.cmd@{[$ENV{DISPLAY}=~/.*(:\d+)/]}",
-  color_file => "$ENV{HOME}/.utilRKrc",
-  tile_file  => "$ENV{HOME}/.tileRKrc",
-  grab_file  => "$ENV{HOME}/.grabRKrc",
-  init_file  => "$ENV{HOME}/.initRKrc",
+  color_file => "$ENV{XDG_CONFIG_HOME}/rickswm/utilRKrc",
+  tile_file  => "$ENV{XDG_CONFIG_HOME}/rickswm/tileRKrc",
+  grab_file  => "$ENV{XDG_CONFIG_HOME}/rickswm/grabRKrc",
+  init_file  => "$ENV{XDG_CONFIG_HOME}/rickswm/initRKrc",
 
   debug => 0,
   );
