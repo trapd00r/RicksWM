@@ -30,60 +30,60 @@
 ########## start of configuration section ######################
 
 my %config =
-	(
-	root_color          => 'navy',
-	frame_color         => 'gold2',
-	blur_color          => 'blue3',  # 'blur' means 'not window with focus'
-	frame_text_color    => 'black',
-	frame_blur_color    => 'white',
+  (
+  root_color          => 'navy',
+  frame_color         => 'gold2',
+  blur_color          => 'blue3',  # 'blur' means 'not window with focus'
+  frame_text_color    => 'black',
+  frame_blur_color    => 'white',
 
-	#blur_pixmap         => '/home/rick/code/water038.xpm',
-	#frame_pixmap        => '/home/rick/code/yello050.xpm',
+  #blur_pixmap         => '/home/rick/code/water038.xpm',
+  #frame_pixmap        => '/home/rick/code/yello050.xpm',
 
-	resize_color        => 'red',
-	resize_blur_color   => 'cyan4',
-	border_color        => 'gold2',
-	border_blur_color   => 'blue',
-	resize_marker_width => 20,
-	bottom_size         => 14,
-	font                => '10x20',
-	text_pad            => 2,
-	frame_border        => 2,
+  resize_color        => 'red',
+  resize_blur_color   => 'cyan4',
+  border_color        => 'gold2',
+  border_blur_color   => 'blue',
+  resize_marker_width => 20,
+  bottom_size         => 14,
+  font                => '10x20',
+  text_pad            => 2,
+  frame_border        => 2,
 
-	solid               => 1,  # toggled with SIGUSR2
-	transparent         => 0,  # label type when non-solid
-	shieldstep          => 0,  # steps to drop shield
-	zoom                => 1,  # zoom or drop change workspaces
+  solid               => 1,  # toggled with SIGUSR2
+  transparent         => 0,  # label type when non-solid
+  shieldstep          => 0,  # steps to drop shield
+  zoom                => 1,  # zoom or drop change workspaces
 
-	gesture_size    => 20,
+  gesture_size    => 20,
 
-	gesture_1_left  => '/home/rick/tasks.sh #Tasks',
-	gesture_1_still => 'xterm +sb -fn 10x20 -bg black -fg white #Xterm',
-	gesture_1_right  => 'gotoRK.pl & #Workspaces',
+  gesture_1_left  => '/home/rick/tasks.sh #Tasks',
+  gesture_1_still => 'xterm +sb -fn 10x20 -bg black -fg white #Xterm',
+  gesture_1_right  => 'gotoRK.pl & #Workspaces',
 
-	gesture_2_up    => 'utilRK ws main #main WS',
-	gesture_2_left  => 'utilRK backward #prev WS',
-	gesture_2_right => 'utilRK forward #next WS',
-	gesture_2_still => q( utilRK listnosticky | menuRK -t 'Select Command / Window to Raise' -3d -c 40 -ws sticky -f $HOME/.menuRKrc -f - & #Menu),
+  gesture_2_up    => 'utilRK ws main #main WS',
+  gesture_2_left  => 'utilRK backward #prev WS',
+  gesture_2_right => 'utilRK forward #next WS',
+  gesture_2_still => q( utilRK listnosticky | menuRK -t 'Select Command / Window to Raise' -3d -c 40 -ws sticky -f $HOME/.menuRKrc -f - & #Menu),
 
-	gesture_3_still => 'utilRK bottom #Raise Bottom',
+  gesture_3_still => 'utilRK bottom #Raise Bottom',
 
-	#leftedge  => 'menuRK -notice -timeout 2 -midscreen left',
-	#topedge   => 'menuRK -notice -timeout 2 -midscreen top',
-	rightedge  => 'edgeRK.pl right',
-	bottomedge => 'edgeRK.pl bottom',
+  #leftedge  => 'menuRK -notice -timeout 2 -midscreen left',
+  #topedge   => 'menuRK -notice -timeout 2 -midscreen top',
+  rightedge  => 'edgeRK.pl right',
+  bottomedge => 'edgeRK.pl bottom',
 
-	workspace  => 'main',
+  workspace  => 'main',
 
-	state_file => "/tmp/RicksWM.state@{[$ENV{DISPLAY}=~/.*(:\d+)/]}",
-	cmd_file   => "/tmp/RicksWM.cmd@{[$ENV{DISPLAY}=~/.*(:\d+)/]}",
-	color_file => "$ENV{HOME}/.utilRKrc",
-	tile_file  => "$ENV{HOME}/.tileRKrc",
-	grab_file  => "$ENV{HOME}/.grabRKrc",
-	init_file  => "$ENV{HOME}/.initRKrc",
+  state_file => "/tmp/RicksWM.state@{[$ENV{DISPLAY}=~/.*(:\d+)/]}",
+  cmd_file   => "/tmp/RicksWM.cmd@{[$ENV{DISPLAY}=~/.*(:\d+)/]}",
+  color_file => "$ENV{HOME}/.utilRKrc",
+  tile_file  => "$ENV{HOME}/.tileRKrc",
+  grab_file  => "$ENV{HOME}/.grabRKrc",
+  init_file  => "$ENV{HOME}/.initRKrc",
 
-	debug => 0,
-	);
+  debug => 0,
+  );
 
 ########## end of configuration section ######################
 
@@ -123,31 +123,31 @@ $SIG{WINCH} = sub {$grabchange++};  # reload grab keys
 use Data::Dumper;
 $Data::Dumper::Sortkeys = 1;
 $SIG{USR1} = sub  # debugging info
-	{
-	if(open my $f, '>>', 'wm.log')
-		{
-		print $f "wid_stack size: " . @wid_stack . "\n",
-			"@wid_stack\n", Dumper \%info;
-		close $f;
-		}
-	};
+  {
+  if(open my $f, '>>', 'wm.log')
+    {
+    print $f "wid_stack size: " . @wid_stack . "\n",
+      "@wid_stack\n", Dumper \%info;
+    close $f;
+    }
+  };
 $SIG{USR2} = sub  # change window labels
-	{
-	$transparent = not $transparent if $solid = not $solid;
-	$redrawall++;
-	};
+  {
+  $transparent = not $transparent if $solid = not $solid;
+  $redrawall++;
+  };
 $ENV{WINDOWMANAGER} = 'RicksWM';
 $ENV{WMPID} = $$;
 my $focus;
 my %root_geo;
 
 sub logger
-	{
-	return unless $config{debug};
-	open LOG, '>>log';
-	print LOG @_;
-	close LOG;
-	}
+  {
+  return unless $config{debug};
+  open LOG, '>>log';
+  print LOG @_;
+  close LOG;
+  }
 
 ####################################### open connection to X server
 
@@ -156,16 +156,16 @@ my $root = $x->root;
 my $xhandle = $x->{'connection'}->fh();
 
 sub next_wid  # next window id
-	{
-	if(@wid_stack > 100) # cycle through at least 100 window ids
-		{
-		return shift(@wid_stack);
-		}
-	else
-		{
-		return $x->new_rsrc;
-		}
-	}
+  {
+  if(@wid_stack > 100) # cycle through at least 100 window ids
+    {
+    return shift(@wid_stack);
+    }
+  else
+    {
+    return $x->new_rsrc;
+    }
+  }
 
 # window base and inc fetch for window sizing by WM_NORMAL_HINTS
 
@@ -180,35 +180,35 @@ my ($fifo, $readcmds, %keyactions);
 my ($fifocount, $eventcount) = (0, 0);
 
 sub getbaseinc
-	{
-	($base_width, $base_height, $width_inc, $height_inc,
-		$minwidth, $minheight, $maxwidth, $maxheight) = (0) x 8;
-	my ($val) = $x->GetProperty(shift(),
-		$x->atom('WM_NORMAL_HINTS'), $x->atom('WM_SIZE_HINTS'), 0, 72, 0);
-	if(length $val >= 72)
-		{
-		my ($flags, $mw, $mh, $mxw, $mxh, $wi, $hi, $bw, $bh) =
-			unpack 'Ix16IIIIIIx16II', $val;
-		($minwidth, $minheight) = ($mw, $mh) if $flags & 16;
-		($maxwidth, $maxheight) = ($mxw, $mxh) if $flags & 32;
-		($width_inc, $height_inc) = ($wi, $hi) if $flags & 64;
-		($base_width, $base_height) = ($bw, $bh) if $flags & 256;
-		}
-	$width_inc = 1 if $width_inc < 1;
-	$base_width += $width_inc while
-		$base_width < 2 * $resizewidth || $base_width < $minwidth;
-	$height_inc = 1 if $height_inc < 1;
-	$base_height += $height_inc while $base_height < $minheight;
-	}
+  {
+  ($base_width, $base_height, $width_inc, $height_inc,
+    $minwidth, $minheight, $maxwidth, $maxheight) = (0) x 8;
+  my ($val) = $x->GetProperty(shift(),
+    $x->atom('WM_NORMAL_HINTS'), $x->atom('WM_SIZE_HINTS'), 0, 72, 0);
+  if(length $val >= 72)
+    {
+    my ($flags, $mw, $mh, $mxw, $mxh, $wi, $hi, $bw, $bh) =
+      unpack 'Ix16IIIIIIx16II', $val;
+    ($minwidth, $minheight) = ($mw, $mh) if $flags & 16;
+    ($maxwidth, $maxheight) = ($mxw, $mxh) if $flags & 32;
+    ($width_inc, $height_inc) = ($wi, $hi) if $flags & 64;
+    ($base_width, $base_height) = ($bw, $bh) if $flags & 256;
+    }
+  $width_inc = 1 if $width_inc < 1;
+  $base_width += $width_inc while
+    $base_width < 2 * $resizewidth || $base_width < $minwidth;
+  $height_inc = 1 if $height_inc < 1;
+  $base_height += $height_inc while $base_height < $minheight;
+  }
 
 sub forceinc
-	{
-	my ($want, $base, $inc, $max) = @_;
-	return $max if $max > 0 && $want > $max;
-	return $base if $base > 0 && $want < $base;
-	return $want if $inc < 2;
-	return $base + int(($want - $base) / $inc) * $inc;
-	}
+  {
+  my ($want, $base, $inc, $max) = @_;
+  return $max if $max > 0 && $want > $max;
+  return $base if $base > 0 && $want < $base;
+  return $want if $inc < 2;
+  return $base + int(($want - $base) / $inc) * $inc;
+  }
 
 sub forcewidth { forceinc @_, $base_width, $width_inc, $maxwidth }
 sub forceheight { forceinc @_, $base_height, $height_inc, $maxheight }
@@ -216,13 +216,13 @@ sub forceheight { forceinc @_, $base_height, $height_inc, $maxheight }
 # check for another window manager running
 
 eval
-	{
-	$x->ChangeWindowAttributes($root, event_mask => $x->pack_event_mask(qw(
-		Exposure SubstructureRedirect
-		ButtonPress ButtonRelease ButtonMotion PointerMotion
-		)));
-	%root_geo = $x->GetGeometry($root); # here to force sync
-	};
+  {
+  $x->ChangeWindowAttributes($root, event_mask => $x->pack_event_mask(qw(
+    Exposure SubstructureRedirect
+    ButtonPress ButtonRelease ButtonMotion PointerMotion
+    )));
+  %root_geo = $x->GetGeometry($root); # here to force sync
+  };
 die "$@\nAnother Window Manager is running, bye.\n\n" if $@;
 
 # SHAPE extension test
@@ -230,48 +230,48 @@ die "$@\nAnother Window Manager is running, bye.\n\n" if $@;
 use X11::Protocol::Ext::SHAPE;
 $x->init_extension('SHAPE') or die "no SHAPE extension";
 $x->CreatePixmap(my $pix = next_wid, $root, 1,
-	$root_geo{width} + 2 * $config{frame_border},
-	$root_geo{height} + 2 * $config{frame_border});
+  $root_geo{width} + 2 * $config{frame_border},
+  $root_geo{height} + 2 * $config{frame_border});
 $x->CreateGC(my $pixgc = next_wid, $pix, background => 0);
 
 # set default workspace
 
 sub put_workspace
-	{
-	$x->ChangeProperty($_[0], $x->atom('_RICKSWM_WORKSPACE'),
-		$x->atom('STRING'), 8, 'Replace', $_[1]);
-	}
+  {
+  $x->ChangeProperty($_[0], $x->atom('_RICKSWM_WORKSPACE'),
+    $x->atom('STRING'), 8, 'Replace', $_[1]);
+  }
 
 sub get_workspace
-	{
-	($x->GetProperty($_[0] || $root, $x->atom('_RICKSWM_WORKSPACE'),
-		$x->atom('STRING'), 0, 100, 0))[0]
-	}
+  {
+  ($x->GetProperty($_[0] || $root, $x->atom('_RICKSWM_WORKSPACE'),
+    $x->atom('STRING'), 0, 100, 0))[0]
+  }
 
 sub put_bgcolor
-	{
-	$x->ChangeProperty($root, $x->atom('_RICKSWM_COLOR'),
-		$x->atom('STRING'), 8, 'Replace', sprintf '#%06x', $_[0]);
-	}
+  {
+  $x->ChangeProperty($root, $x->atom('_RICKSWM_COLOR'),
+    $x->atom('STRING'), 8, 'Replace', sprintf '#%06x', $_[0]);
+  }
 
 # get colors
 
 my %color_cache;
 
 sub getcolor
-	{
-	my $name = shift;
-	$color_cache{$name} ||= ($x->AllocColor($x->{default_colormap},
-		($x->LookupColor($x->{default_colormap}, $name))[0..2]))[0];
-	}
+  {
+  my $name = shift;
+  $color_cache{$name} ||= ($x->AllocColor($x->{default_colormap},
+    ($x->LookupColor($x->{default_colormap}, $name))[0..2]))[0];
+  }
 
 my ($deco_color, $deco_blur_color, $root_color, $font_color, $blur_color,
-	$resize_color, $resize_blur_color, $border_color, $border_blur_color,
-	$stop_body, $stop_outline) =
-	map { getcolor($_) } @config{qw(frame_color blur_color root_color
-	frame_text_color frame_blur_color
-	resize_color resize_blur_color border_color border_blur_color )},
-	'red', 'white';
+  $resize_color, $resize_blur_color, $border_color, $border_blur_color,
+  $stop_body, $stop_outline) =
+  map { getcolor($_) } @config{qw(frame_color blur_color root_color
+  frame_text_color frame_blur_color
+  resize_color resize_blur_color border_color border_blur_color )},
+  'red', 'white';
 
 #warn Dumper \%color_cache;
 
@@ -280,8 +280,8 @@ my ($deco_color, $deco_blur_color, $root_color, $font_color, $blur_color,
 $x->OpenFont(my $font = $x->new_rsrc, $config{font});
 my %v = $x->QueryFont($font);
 my ($vpad, $bottom, $fontheight, $fontoff) = (
-	@config{'text_pad', 'bottom_size'},
-	$v{font_ascent} + $v{font_descent}, $v{font_ascent});
+  @config{'text_pad', 'bottom_size'},
+  $v{font_ascent} + $v{font_descent}, $v{font_ascent});
 my $labelheight = 2 * $vpad + $fontheight;
 my $deltah = $labelheight + $bottom;
 my $maxy = $root_geo{height} - $labelheight;
@@ -290,103 +290,103 @@ my $maxy = $root_geo{height} - $labelheight;
 
 $x->OpenFont(my $cursorfont = $x->new_rsrc, 'cursor');
 $x->CreateGlyphCursor(my $cursor = $x->new_rsrc, ($cursorfont)x2,
-	68, 69, (65535)x3, (0)x3);
+  68, 69, (65535)x3, (0)x3);
 $x->ChangeWindowAttributes($root, background_pixel => $root_color,
-	cursor => $cursor);
+  cursor => $cursor);
 $x->ClearArea($root, 0, 0, 0, 0, 0);
 
 # get graphic contexts
 
 $x->CreateGC(my $gc = $x->new_rsrc, $root, font => $font,
-	foreground => $font_color, background => $deco_color);
+  foreground => $font_color, background => $deco_color);
 $x->CreateGC(my $gc_blur = $x->new_rsrc, $root, font => $font,
-	foreground => $blur_color, background => $deco_blur_color);
+  foreground => $blur_color, background => $deco_blur_color);
 $x->CreateGC(my $gc_resize = $x->new_rsrc, $root,
-	foreground => $resize_color);
+  foreground => $resize_color);
 $x->CreateGC(my $gc_blur_resize = $x->new_rsrc, $root,
-	foreground => $resize_blur_color);
+  foreground => $resize_blur_color);
 
 # get shield window for workspace changes
 
 $x->CreateWindow(my $shield = $x->new_rsrc, $root,
-	'InputOutput', $x->root_depth, 'CopyFromParent',
-	(0, 0), $root_geo{width}, $root_geo{height}, 0,
-	override_redirect => 1,
-	event_mask => $x->pack_event_mask( qw( Exposure FocusChange EnterWindow )),
-	);
+  'InputOutput', $x->root_depth, 'CopyFromParent',
+  (0, 0), $root_geo{width}, $root_geo{height}, 0,
+  override_redirect => 1,
+  event_mask => $x->pack_event_mask( qw( Exposure FocusChange EnterWindow )),
+  );
 
 # get gesturemenu
 
 $x->CreateWindow(my $gesturemenu = $x->new_rsrc, $root,
-	'InputOutput', $x->root_depth, 'CopyFromParent',
-	(0, 0), (6 * $config{gesture_size}) x 2, 0,
-	override_redirect => 1,
-	event_mask => $x->pack_event_mask( qw( Exposure ) ),
-	);
+  'InputOutput', $x->root_depth, 'CopyFromParent',
+  (0, 0), (6 * $config{gesture_size}) x 2, 0,
+  override_redirect => 1,
+  event_mask => $x->pack_event_mask( qw( Exposure ) ),
+  );
 $x->CreateGC(my $gc_gesturemenu = $x->new_rsrc, $root,
-	foreground => $deco_color,
-	background => $root_color,
-	line_style => 'DoubleDash',
-	line_width => 5,
-	font => $font,
-	);
+  foreground => $deco_color,
+  background => $root_color,
+  line_style => 'DoubleDash',
+  line_width => 5,
+  font => $font,
+  );
 
 sub draw_gesturemenu
-	{
-	my $title = ' 'x20 . ($currentgesture =~ /#/ ? $' : '') . ' 'x20;
-	my $width = textwidth($title);
-	$x->ImageText8($gesturemenu, $gc_gesturemenu,
-		3 * $config{gesture_size} - $width / 2,
-		3 * $config{gesture_size} + $fontoff / 2 - 2,
-		$title);
+  {
+  my $title = ' 'x20 . ($currentgesture =~ /#/ ? $' : '') . ' 'x20;
+  my $width = textwidth($title);
+  $x->ImageText8($gesturemenu, $gc_gesturemenu,
+    3 * $config{gesture_size} - $width / 2,
+    3 * $config{gesture_size} + $fontoff / 2 - 2,
+    $title);
 
-	$x->PolySegment($gesturemenu, $gc_gesturemenu,
-		map $_*$config{gesture_size},
-		0, 0 => 2, 2,
-		0, 6 => 2, 4,
-		6, 0 => 4, 2,
-		6, 6 => 4, 4);
-	$x->PolyArc($gesturemenu, $gc_gesturemenu, [
-		( (3 - 1.41) * $config{gesture_size}) x 2,
-		(2.82 * $config{gesture_size}) x 2,
-		0, 360*64 ]);
+  $x->PolySegment($gesturemenu, $gc_gesturemenu,
+    map $_*$config{gesture_size},
+    0, 0 => 2, 2,
+    0, 6 => 2, 4,
+    6, 0 => 4, 2,
+    6, 6 => 4, 4);
+  $x->PolyArc($gesturemenu, $gc_gesturemenu, [
+    ( (3 - 1.41) * $config{gesture_size}) x 2,
+    (2.82 * $config{gesture_size}) x 2,
+    0, 360*64 ]);
 
-	$x->ImageText8($gesturemenu, $gc_gesturemenu,
-		3 * $config{gesture_size} - $width / 2,
-		3 * $config{gesture_size} + $fontoff / 2 - 2,
-		$title) if $title =~ /\S/;
-	}
+  $x->ImageText8($gesturemenu, $gc_gesturemenu,
+    3 * $config{gesture_size} - $width / 2,
+    3 * $config{gesture_size} + $fontoff / 2 - 2,
+    $title) if $title =~ /\S/;
+  }
 
 # get stopsign for deleting windows
 
 $x->CreateWindow(my $stopsign = $x->new_rsrc, $root,
-	'InputOutput', $x->root_depth, 'CopyFromParent',
-	(0, 0), ($config{gesture_size} * 2) x 2, 0,
-	override_redirect => 1,
-	event_mask => $x->pack_event_mask( qw( Exposure ) ),
-	);
+  'InputOutput', $x->root_depth, 'CopyFromParent',
+  (0, 0), ($config{gesture_size} * 2) x 2, 0,
+  override_redirect => 1,
+  event_mask => $x->pack_event_mask( qw( Exposure ) ),
+  );
 $x->CreateGC(my $stopsign_gc = $x->new_rsrc, $root,
-	line_width => 3, background => 0x000000);
+  line_width => 3, background => 0x000000);
 
 my @stop_points;
 
 sub draw_stopsign
-	{
-	if(not @stop_points)
-		{
-		my $s = $config{gesture_size} - 2;
-		my $d = $s / (1 + sqrt 2);
-		my $dd = $s - $d;
-		@stop_points = ( 2, $s, 0, -$d, $dd, -$dd, 2*$d, 0, $dd, $dd,
-			0, 2*$d, -$dd, $dd, -2*$d, 0, -$dd, -$dd, 0, -$d );
-		}
+  {
+  if(not @stop_points)
+    {
+    my $s = $config{gesture_size} - 2;
+    my $d = $s / (1 + sqrt 2);
+    my $dd = $s - $d;
+    @stop_points = ( 2, $s, 0, -$d, $dd, -$dd, 2*$d, 0, $dd, $dd,
+      0, 2*$d, -$dd, $dd, -2*$d, 0, -$dd, -$dd, 0, -$d );
+    }
 
-	$x->ChangeGC($stopsign_gc, foreground => $stop_body);
-	$x->FillPoly($stopsign, $stopsign_gc, 'Convex', 'Previous', @stop_points);
+  $x->ChangeGC($stopsign_gc, foreground => $stop_body);
+  $x->FillPoly($stopsign, $stopsign_gc, 'Convex', 'Previous', @stop_points);
 
-	$x->ChangeGC($stopsign_gc, foreground => $stop_outline);
-	$x->PolyLine($stopsign, $stopsign_gc, 'Previous', @stop_points);
-	}
+  $x->ChangeGC($stopsign_gc, foreground => $stop_outline);
+  $x->PolyLine($stopsign, $stopsign_gc, 'Previous', @stop_points);
+  }
 
 # display (minimal) splash screen
 
@@ -394,72 +394,72 @@ my $splash = "  Welcome to RicksWM version $RicksWM::VERSION  ";
 (my $bit16 = $splash) =~ s/(.)/\0$1/g;
 
 sub textwidth
-	{
-	(my $bit16 = shift) =~ s/(.)/\0$1/g;
-	my %v = $x->QueryTextExtents($font, $bit16);
-	return $v{overall_width};
-	}
+  {
+  (my $bit16 = shift) =~ s/(.)/\0$1/g;
+  my %v = $x->QueryTextExtents($font, $bit16);
+  return $v{overall_width};
+  }
 
 my ($redmask, $greenmask, $bluemask);
 
 sub fraction_color
-	{
-	if(not $redmask)
-		{
-		my $rv = $x->visuals->{$x->root_visual};
-		$redmask = $rv->{red_mask};
-		$greenmask = $rv->{green_mask};
-		$bluemask = $rv->{blue_mask};
-		}
-	my ($fraction, $color) = @_;
-	$fraction = sqrt(1 - (1 - $fraction)**2);
+  {
+  if(not $redmask)
+    {
+    my $rv = $x->visuals->{$x->root_visual};
+    $redmask = $rv->{red_mask};
+    $greenmask = $rv->{green_mask};
+    $bluemask = $rv->{blue_mask};
+    }
+  my ($fraction, $color) = @_;
+  $fraction = sqrt(1 - (1 - $fraction)**2);
 
-	return
-		((($color & $redmask  ) * $fraction) & $redmask  ) |
-		((($color & $greenmask) * $fraction) & $greenmask) |
-		((($color & $bluemask ) * $fraction) & $bluemask );
-	}
+  return
+    ((($color & $redmask  ) * $fraction) & $redmask  ) |
+    ((($color & $greenmask) * $fraction) & $greenmask) |
+    ((($color & $bluemask ) * $fraction) & $bluemask );
+  }
 
 sub draw_splash
-	{
-	$x->ClearArea($root, 0, 0, 0, 0, 0);
+  {
+  $x->ClearArea($root, 0, 0, 0, 0, 0);
 
-	my $wide = textwidth($splash);
-	my $oval = 100;
-	my $delta = 3;
-	my $inc = 40;
-	my $xx = ($root_geo{width} - $wide) / 2 - 6 - $delta * $inc - $oval;
-	my $yy = ($root_geo{height} - $wide) / 2 - 20 - $delta * $inc;
-	my $ww = $wide + 12 + 2 * ($delta * $inc + $oval);
-	my $hh = $wide + 2 * $delta * $inc;
+  my $wide = textwidth($splash);
+  my $oval = 100;
+  my $delta = 3;
+  my $inc = 40;
+  my $xx = ($root_geo{width} - $wide) / 2 - 6 - $delta * $inc - $oval;
+  my $yy = ($root_geo{height} - $wide) / 2 - 20 - $delta * $inc;
+  my $ww = $wide + 12 + 2 * ($delta * $inc + $oval);
+  my $hh = $wide + 2 * $delta * $inc;
 
-	for my $ii (0..$inc)
-		{
-		$x->ChangeGC($gc, foreground => fraction_color($ii / $inc, $deco_color));
-		$x->PolyFillArc($root, $gc, [$xx, $yy, $ww, $hh, 0, 360 * 64]);
-		$xx += $delta;
-		$yy += $delta;
-		$ww -= 2 * $delta;
-		$hh -= 2 * $delta;
-		}
+  for my $ii (0..$inc)
+    {
+    $x->ChangeGC($gc, foreground => fraction_color($ii / $inc, $deco_color));
+    $x->PolyFillArc($root, $gc, [$xx, $yy, $ww, $hh, 0, 360 * 64]);
+    $xx += $delta;
+    $yy += $delta;
+    $ww -= 2 * $delta;
+    $hh -= 2 * $delta;
+    }
 
-	$x->ChangeGC($gc, foreground => $font_color);
-	$x->ImageText8($root, $gc, ($root_geo{width} - $wide) / 2,
-		$root_geo{height} / 2 - 20, $splash);
-	}
+  $x->ChangeGC($gc, foreground => $font_color);
+  $x->ImageText8($root, $gc, ($root_geo{width} - $wide) / 2,
+    $root_geo{height} / 2 - 20, $splash);
+  }
 
 if($currentworkspace = get_workspace)
-	{
-	# this is a restart, the root already has a _RICKSWM_WORKSPACE
-	}
+  {
+  # this is a restart, the root already has a _RICKSWM_WORKSPACE
+  }
 else
-	{
-	put_workspace($root, $currentworkspace = $config{workspace});
-	if(open my $f, '<', $config{init_file})
-		{
-		@initcmds = grep !/^\s*(#|$)/, <$f>;
-		}
-	}
+  {
+  put_workspace($root, $currentworkspace = $config{workspace});
+  if(open my $f, '<', $config{init_file})
+    {
+    @initcmds = grep !/^\s*(#|$)/, <$f>;
+    }
+  }
 
 change_bg($currentworkspace, getcolor(get_wscolor($currentworkspace)));
 put_bgcolor(getcolor(get_wscolor($currentworkspace)));
@@ -471,129 +471,129 @@ my ($event, $window, $button, $name);
 $x->event_handler('queue');
 
 system "mkfifo --mode=0644 $config{cmd_file}" and warn "mkfifo failed"
-	unless -p $config{cmd_file};
+  unless -p $config{cmd_file};
 open $fifo, '+<', $config{cmd_file} or
-	warn "$0: $! opening $config{cmd_file}";
+  warn "$0: $! opening $config{cmd_file}";
 
 sub get_deco
-	{
-	my $child = shift;
-	my ($deco) = grep $info{$_}{child} == $child, keys %info;
-	return $deco;
-	}
+  {
+  my $child = shift;
+  my ($deco) = grep $info{$_}{child} == $child, keys %info;
+  return $deco;
+  }
 
 sub downsize
-	{
-	return if $solid && not $redrawall;
-	my $window = shift;
-	return unless exists $info{$window};
-	my $bw2 = 2 * $config{frame_border};
+  {
+  return if $solid && not $redrawall;
+  my $window = shift;
+  return unless exists $info{$window};
+  my $bw2 = 2 * $config{frame_border};
 
-	$x->ChangeGC($pixgc, foreground => 1);
-	$x->PolyFillRectangle($pix, $pixgc,
-		[0, 0,
-		$info{$window}{width} + $bw2,
-		$info{$window}{height} + $bw2]);
+  $x->ChangeGC($pixgc, foreground => 1);
+  $x->PolyFillRectangle($pix, $pixgc,
+    [0, 0,
+    $info{$window}{width} + $bw2,
+    $info{$window}{height} + $bw2]);
 
-	$x->ChangeGC($pixgc, foreground => 0);
-	my $wide = $info{$window}{size};
-	$x->PolyFillRectangle($pix, $pixgc,
-		[$wide + 10 + $bw2, 0,
-		$info{$window}{width} + $bw2 - $wide - 10, $labelheight - 2],
-		) if $wide + 10 < $info{$window}{width} + $bw2;
+  $x->ChangeGC($pixgc, foreground => 0);
+  my $wide = $info{$window}{size};
+  $x->PolyFillRectangle($pix, $pixgc,
+    [$wide + 10 + $bw2, 0,
+    $info{$window}{width} + $bw2 - $wide - 10, $labelheight - 2],
+    ) if $wide + 10 < $info{$window}{width} + $bw2;
 
-	$x->PolyFillRectangle($pix, $pixgc,
-		[ 0, $info{$window}{height} + $bw2 - $bottom + 1,
-		$info{$window}{width} + $bw2, $info{$window}{height} + $bw2]);
+  $x->PolyFillRectangle($pix, $pixgc,
+    [ 0, $info{$window}{height} + $bw2 - $bottom + 1,
+    $info{$window}{width} + $bw2, $info{$window}{height} + $bw2]);
 
-	if($transparent)
-		{
-		$x->PolyFillRectangle($pix, $pixgc,
-			[ 0, 0, $info{$window}{width} + $bw2, $labelheight]);
+  if($transparent)
+    {
+    $x->PolyFillRectangle($pix, $pixgc,
+      [ 0, 0, $info{$window}{width} + $bw2, $labelheight]);
 
-		$x->ChangeGC($pixgc, foreground => 1, font => $font);
-		$x->ImageText8($pix, $pixgc,
-			5 + $config{frame_border}, $fontoff + $vpad + $config{frame_border},
-			$info{$window}{title});
-		}
+    $x->ChangeGC($pixgc, foreground => 1, font => $font);
+    $x->ImageText8($pix, $pixgc,
+      5 + $config{frame_border}, $fontoff + $vpad + $config{frame_border},
+      $info{$window}{title});
+    }
 
-	$x->ShapeMask($window, 'Bounding', 'Set',
-		-$config{frame_border}, -$config{frame_border}, $pix);
-	$info{$window}{shape} = 1;
-	}
+  $x->ShapeMask($window, 'Bounding', 'Set',
+    -$config{frame_border}, -$config{frame_border}, $pix);
+  $info{$window}{shape} = 1;
+  }
 
 sub draw_deco
-	{
-	my $window = shift;
-	return unless exists $info{$window};
-	my $blur = $window != $focus;
+  {
+  my $window = shift;
+  return unless exists $info{$window};
+  my $blur = $window != $focus;
 
-	if($blur && not $solid) # shorten label if not focused
-		{
-		downsize($window);
-		}
-	elsif($info{$window}{shape} || $solid)
-		{
-		$x->ShapeMask($window, 'Bounding', 'Set', 0, 0, 'None');
-		$info{$window}{shape} = 0;
-		}
+  if($blur && not $solid) # shorten label if not focused
+    {
+    downsize($window);
+    }
+  elsif($info{$window}{shape} || $solid)
+    {
+    $x->ShapeMask($window, 'Bounding', 'Set', 0, 0, 'None');
+    $info{$window}{shape} = 0;
+    }
 
-	$x->ChangeWindowAttributes($window,
-		border_pixel => $blur ? $border_blur_color : $border_color,
-		background_pixel => $blur ? $deco_blur_color : $deco_color);
-	if(!$blur and $config{frame_pixmap})
-		{
-		my $tile = get_tilefromfilename($config{frame_pixmap});
-		if($tile)
-			{
-			$x->ChangeWindowAttributes($window,
-				background_pixmap => $tile,
-				border_pixmap => $tile,);
-			}
-		}
-	elsif($blur and $config{blur_pixmap})
-		{
-		my $tile = get_tilefromfilename($config{blur_pixmap});
-		if($tile)
-			{
-			$x->ChangeWindowAttributes($window,
-				background_pixmap => $tile,
-				border_pixmap => $tile,);
-			}
-		}
-	$x->ClearArea($window, 0, 0, 0, 0, 0);
-	$x->ImageText8($window, $blur ? $gc_blur : $gc,
-		5, $fontoff + $vpad, $info{$window}{title});
-	$x->FillPoly($window, $blur ? $gc_blur_resize : $gc_resize,
-		'Convex', 'Previous', $info{$window}{width}, $info{$window}{height},
-			0, -$bottom, -$resizewidth, $bottom);
-	$x->FillPoly($window, $blur ? $gc_blur_resize : $gc_resize,
-		'Convex', 'Previous', 0, $info{$window}{height},
-			0, -$bottom, $resizewidth, $bottom);
-	}
+  $x->ChangeWindowAttributes($window,
+    border_pixel => $blur ? $border_blur_color : $border_color,
+    background_pixel => $blur ? $deco_blur_color : $deco_color);
+  if(!$blur and $config{frame_pixmap})
+    {
+    my $tile = get_tilefromfilename($config{frame_pixmap});
+    if($tile)
+      {
+      $x->ChangeWindowAttributes($window,
+        background_pixmap => $tile,
+        border_pixmap => $tile,);
+      }
+    }
+  elsif($blur and $config{blur_pixmap})
+    {
+    my $tile = get_tilefromfilename($config{blur_pixmap});
+    if($tile)
+      {
+      $x->ChangeWindowAttributes($window,
+        background_pixmap => $tile,
+        border_pixmap => $tile,);
+      }
+    }
+  $x->ClearArea($window, 0, 0, 0, 0, 0);
+  $x->ImageText8($window, $blur ? $gc_blur : $gc,
+    5, $fontoff + $vpad, $info{$window}{title});
+  $x->FillPoly($window, $blur ? $gc_blur_resize : $gc_resize,
+    'Convex', 'Previous', $info{$window}{width}, $info{$window}{height},
+      0, -$bottom, -$resizewidth, $bottom);
+  $x->FillPoly($window, $blur ? $gc_blur_resize : $gc_resize,
+    'Convex', 'Previous', 0, $info{$window}{height},
+      0, -$bottom, $resizewidth, $bottom);
+  }
 
 sub draw_all_deco
-	{
-	draw_deco($_) for keys %info;
-	$x->flush;
-	$redrawall = 0;
-	}
+  {
+  draw_deco($_) for keys %info;
+  $x->flush;
+  $redrawall = 0;
+  }
 
 sub forkcmd
-	{
-	my $cmd = shift;
-	s/#.*// for $cmd;
-	my $pid = fork and return 1;
-	defined $pid or return;
-	exec $cmd;
-	warn "$! on exec of $cmd";
-	exit 1;
-	}
+  {
+  my $cmd = shift;
+  s/#.*// for $cmd;
+  my $pid = fork and return 1;
+  defined $pid or return;
+  exec $cmd;
+  warn "$! on exec of $cmd";
+  exit 1;
+  }
 
 sub runcommand
-	{
-	forkcmd(shift() or return 0);
-	}
+  {
+  forkcmd(shift() or return 0);
+  }
 
 # find pre-existing windows and fake MapRequest events for them
 # so they get decorations
@@ -601,1083 +601,1083 @@ sub runcommand
 my @fake_events;
 (undef, undef, my @children) = $x->QueryTree($root);
 for my $window (@children)
-	{
-	my %attr = $x->GetWindowAttributes($window);
-	next if $attr{override_redirect} || $attr{map_state} ne 'Viewable';
-	push @fake_events, { name => 'MapRequest', fake_event => 1,
-		parent => $root, window => $window, override_redirect => 0 };
-	}
+  {
+  my %attr = $x->GetWindowAttributes($window);
+  next if $attr{override_redirect} || $attr{map_state} ne 'Viewable';
+  push @fake_events, { name => 'MapRequest', fake_event => 1,
+    parent => $root, window => $window, override_redirect => 0 };
+  }
 my $starttime = time;
 $x->flush;
 
-while($more)	##################################### event loop
-	{
-	eval
-		{
-		if(@fake_events)
-			{
-			%e = %{pop @fake_events};
-			}
-		else
-			{
-			$more = 2, draw_splash if $more > 2;
+while($more)  ##################################### event loop
+  {
+  eval
+    {
+    if(@fake_events)
+      {
+      %e = %{pop @fake_events};
+      }
+    else
+      {
+      $more = 2, draw_splash if $more > 2;
 
-			forkcmd(shift @initcmds) while @initcmds;
+      forkcmd(shift @initcmds) while @initcmds;
 
-			%e = ();
+      %e = ();
 
-			while($more and not %e)
-				{
-				$changedstate = 0, save_state() if $changedstate;
-				draw_all_deco() if $redrawall;
+      while($more and not %e)
+        {
+        $changedstate = 0, save_state() if $changedstate;
+        draw_all_deco() if $redrawall;
 
-				loadgrabs(), $grabchange = 0 if $grabchange;
-				if( not %e = $x->dequeue_event )
-					{
-					$x->flush;
-					my @h = IO::Select->new($xhandle, $fifo)->can_read(0.5);
-					if(grep $_ == $xhandle, @h)
-						{
-						%e = $x->next_event;
-						}
-					elsif(grep $_ == $fifo, @h)
-						{
-						if(sysread $fifo, $readcmds, 1024, length $readcmds)
-							{
-							$1 && fifo_cmd($1) while $readcmds =~ s/(.*)\n//;
-							}
-						else
-							{
-							close $fifo;
-							open $fifo, '+<', $config{cmd_file} or
-								warn "$0: $! opening $config{cmd_file}";
-							}
-						}
-					else
-						{
-						$timeout++;
-						if($armed)
-							{
-							if($edge[0] == 0 && $config{leftedge})
-								{
-								$armed = 0;
-								runcommand($config{leftedge});
-								}
-							elsif($edge[1] == 0 && $config{topedge})
-								{
-								$armed = 0;
-								runcommand($config{topedge});
-								}
-							elsif($edge[0] == $root_geo{width} - 1 && $config{rightedge})
-								{
-								$armed = 0;
-								runcommand($config{rightedge});
-								}
-							elsif($edge[1] == $root_geo{height} - 1 && $config{bottomedge})
-								{
-								$armed = 0;
-								runcommand($config{bottomedge});
-								}
-							}
-						}
-					}
-				}
+        loadgrabs(), $grabchange = 0 if $grabchange;
+        if( not %e = $x->dequeue_event )
+          {
+          $x->flush;
+          my @h = IO::Select->new($xhandle, $fifo)->can_read(0.5);
+          if(grep $_ == $xhandle, @h)
+            {
+            %e = $x->next_event;
+            }
+          elsif(grep $_ == $fifo, @h)
+            {
+            if(sysread $fifo, $readcmds, 1024, length $readcmds)
+              {
+              $1 && fifo_cmd($1) while $readcmds =~ s/(.*)\n//;
+              }
+            else
+              {
+              close $fifo;
+              open $fifo, '+<', $config{cmd_file} or
+                warn "$0: $! opening $config{cmd_file}";
+              }
+            }
+          else
+            {
+            $timeout++;
+            if($armed)
+              {
+              if($edge[0] == 0 && $config{leftedge})
+                {
+                $armed = 0;
+                runcommand($config{leftedge});
+                }
+              elsif($edge[1] == 0 && $config{topedge})
+                {
+                $armed = 0;
+                runcommand($config{topedge});
+                }
+              elsif($edge[0] == $root_geo{width} - 1 && $config{rightedge})
+                {
+                $armed = 0;
+                runcommand($config{rightedge});
+                }
+              elsif($edge[1] == $root_geo{height} - 1 && $config{bottomedge})
+                {
+                $armed = 0;
+                runcommand($config{bottomedge});
+                }
+              }
+            }
+          }
+        }
 
-			$x->ClearArea($root, 0, 0, 0, 0, 0), $more = 1
-				if $more == 2 and $starttime + 15 < time; # leave up for 15 seconds
-			}
-		next unless %e; # int system call...
-		($event, $window, $button, $name) = @e{qw(event window detail name)};
-		logger("$name: @{[map{$_, $e{$_}}sort keys %e]}\n\n") if $config{debug};
+      $x->ClearArea($root, 0, 0, 0, 0, 0), $more = 1
+        if $more == 2 and $starttime + 15 < time; # leave up for 15 seconds
+      }
+    next unless %e; # int system call...
+    ($event, $window, $button, $name) = @e{qw(event window detail name)};
+    logger("$name: @{[map{$_, $e{$_}}sort keys %e]}\n\n") if $config{debug};
 
-		$name =~ /^\w+\z/ or die "bad event name <$name>";
-		$eventcount++;
-		EVENT->$name();   # use OOP for dispatching events
-		};
-	print STDERR $@ if $@;
-	}
+    $name =~ /^\w+\z/ or die "bad event name <$name>";
+    $eventcount++;
+    EVENT->$name();   # use OOP for dispatching events
+    };
+  print STDERR $@ if $@;
+  }
 
 # I'm leaving, reparent windows to root for possible restart
 
 for my $deco (keys %info)
-	{
-	eval  # protection for just closed window
-		{
-		my %attr = $x->GetGeometry($deco);
-		$x->ReparentWindow($info{$deco}{child}, $root, $attr{x}, $attr{y});
+  {
+  eval  # protection for just closed window
+    {
+    my %attr = $x->GetGeometry($deco);
+    $x->ReparentWindow($info{$deco}{child}, $root, $attr{x}, $attr{y});
 
-		# save workspace name in client
+    # save workspace name in client
 
-		put_workspace($info{$deco}{child}, get_workspace($deco));
-		%attr = $x->GetGeometry($root); # to flush error from change
-		};
-	}
+    put_workspace($info{$deco}{child}, get_workspace($deco));
+    %attr = $x->GetGeometry($root); # to flush error from change
+    };
+  }
 eval  # for error protection
-	{
-	$x->CloseFont($_) for $font, $cursorfont;
-	$x->FreeGC($_) for $gc, $gc_resize;
-	};
+  {
+  $x->CloseFont($_) for $font, $cursorfont;
+  $x->FreeGC($_) for $gc, $gc_resize;
+  };
 undef $x;
 if($config{debug})
-	{
-	require Data::Dumper;
-	$Data::Dumper::Sortkeys = $Data::Dumper::Sortkeys = 1;
-	logger(Data::Dumper::Dumper(\%info));
-	}
+  {
+  require Data::Dumper;
+  $Data::Dumper::Sortkeys = $Data::Dumper::Sortkeys = 1;
+  logger(Data::Dumper::Dumper(\%info));
+  }
 print "events: $eventcount  fifo cmds: $fifocount  ",
-	"state saves: $save_count  timeouts: $timeout\n";
+  "state saves: $save_count  timeouts: $timeout\n";
 exec $0, @ARGV if $restart;  # restart if wanted
 exit 0;
 
 # utility subs here
 
 sub loadgrabs
-	{
-	return unless -f $config{grab_file};
-	my %modmap = qw(shift 1 capslock 2 control 4 alt 8 mod1 8 mod2 16);
-	my %keycodes;
+  {
+  return unless -f $config{grab_file};
+  my %modmap = qw(shift 1 capslock 2 control 4 alt 8 mod1 8 mod2 16);
+  my %keycodes;
 
-	my $code = $x->{min_keycode};
-	for ($x->GetKeyboardMapping($code, $x->{max_keycode} - $code + 1))
-		{
-		$keycodes{$_} ||= $code for @$_; # the ||= for 'less' & 'greater'
-		$code++;
-		}
+  my $code = $x->{min_keycode};
+  for ($x->GetKeyboardMapping($code, $x->{max_keycode} - $code + 1))
+    {
+    $keycodes{$_} ||= $code for @$_; # the ||= for 'less' & 'greater'
+    $code++;
+    }
 
 # input format:  keyname  mod[[,mod]]  action
 # example:       Left  alt,control  xterm -geometry '-0+0'
 # example:       F5    none  xclock -update 1 -bg orange2
 
-	my %new;
-	if(open my $h, '<', $config{grab_file})
-		{
-		while(<$h>)
-			{
-			next if /^\s*[#\n]/;
-			chomp;
-			my ($keycode, $modifier, $action) = split ' ', $_, 3;
-			$keycode =~ s/^\+(?=\d+$)// or
-				$keycode = $keycodes{$::Keysyms{$keycode}};
+  my %new;
+  if(open my $h, '<', $config{grab_file})
+    {
+    while(<$h>)
+      {
+      next if /^\s*[#\n]/;
+      chomp;
+      my ($keycode, $modifier, $action) = split ' ', $_, 3;
+      $keycode =~ s/^\+(?=\d+$)// or
+        $keycode = $keycodes{$::Keysyms{$keycode}};
 
-			my $mod = 0;
-			$mod |= $modifier=~/$_/i * $modmap{$_} for keys %modmap;
+      my $mod = 0;
+      $mod |= $modifier=~/$_/i * $modmap{$_} for keys %modmap;
 
-			warn("duplicate grab ignored $_"), next
-				if exists $new{"$keycode,$mod"};
-			$new{"$keycode,$mod"} = $action;
-			}
-		}
+      warn("duplicate grab ignored $_"), next
+        if exists $new{"$keycode,$mod"};
+      $new{"$keycode,$mod"} = $action;
+      }
+    }
 
-	for (grep !$new{$_}, keys %keyactions) # delete if no longer used
-		{
-		eval {$x->UngrabKey(split(','), $root)};
-		warn $@ if $@;
-		}
-	for (grep !$keyactions{$_}, keys %new) # grab if brand new
-		{
-		eval {$x->GrabKey(split(','), $root, 1,
-			'Synchronous', 'Asynchronous')};
-		warn $@ if $@;
-		}
-	# note: just changing an action does not change grabs
-	%keyactions = %new; # copy over so new actions are present
-	}
+  for (grep !$new{$_}, keys %keyactions) # delete if no longer used
+    {
+    eval {$x->UngrabKey(split(','), $root)};
+    warn $@ if $@;
+    }
+  for (grep !$keyactions{$_}, keys %new) # grab if brand new
+    {
+    eval {$x->GrabKey(split(','), $root, 1,
+      'Synchronous', 'Asynchronous')};
+    warn $@ if $@;
+    }
+  # note: just changing an action does not change grabs
+  %keyactions = %new; # copy over so new actions are present
+  }
 
 sub notifychild
-	{
-	my $event = shift;
-	my %v = $x->GetGeometry($event);
-	$x->SendEvent($info{$event}{child}, 0, $x->pack_event_mask(),
-		$x->pack_event(
-		'name' => 'ConfigureNotify',
-		'event' => $info{$event}{child},
-		'window' => $info{$event}{child},
-		'x' => $v{'x'} + $config{frame_border},
-		'y' => $v{'y'} + $labelheight + $config{frame_border},
-		'width' => $v{'width'},
-		'height' => $v{'height'} - $deltah,
-		'border_width' => 0,
-		'above' => 0,
-		'override_redirect' => 0,
-		));
-	$changedstate++;
-	}
+  {
+  my $event = shift;
+  my %v = $x->GetGeometry($event);
+  $x->SendEvent($info{$event}{child}, 0, $x->pack_event_mask(),
+    $x->pack_event(
+    'name' => 'ConfigureNotify',
+    'event' => $info{$event}{child},
+    'window' => $info{$event}{child},
+    'x' => $v{'x'} + $config{frame_border},
+    'y' => $v{'y'} + $labelheight + $config{frame_border},
+    'width' => $v{'width'},
+    'height' => $v{'height'} - $deltah,
+    'border_width' => 0,
+    'above' => 0,
+    'override_redirect' => 0,
+    ));
+  $changedstate++;
+  }
 
 sub move_configure
-	{
-	my $event = shift;
-	my $child = $info{$event}{child};
-	getbaseinc $child;
-	my %v = $x->GetGeometry($event);
-	my $ix = forcewidth $v{width};
-	my $iy = forceheight $v{height} - $deltah;
+  {
+  my $event = shift;
+  my $child = $info{$event}{child};
+  getbaseinc $child;
+  my %v = $x->GetGeometry($event);
+  my $ix = forcewidth $v{width};
+  my $iy = forceheight $v{height} - $deltah;
 
-	$x->ConfigureWindow($event, width => $ix, height => $iy + $deltah,
-		x => (my $tmpx = $v{x} < 0 && $maxvmode ? 0 : $v{x}) );
-	$info{$event}{width} = $ix;
-	$info{$event}{height} = $iy + $deltah;
-	$info{$event}{x} = $tmpx;
-	$info{$event}{y} = $v{y};
-	draw_deco $event;
-	$x->ConfigureWindow($child, border_width => 0,
-		width => $ix, height => $iy);
-	}
+  $x->ConfigureWindow($event, width => $ix, height => $iy + $deltah,
+    x => (my $tmpx = $v{x} < 0 && $maxvmode ? 0 : $v{x}) );
+  $info{$event}{width} = $ix;
+  $info{$event}{height} = $iy + $deltah;
+  $info{$event}{x} = $tmpx;
+  $info{$event}{y} = $v{y};
+  draw_deco $event;
+  $x->ConfigureWindow($child, border_width => 0,
+    width => $ix, height => $iy);
+  }
 
 sub save_state
-	{
-	local $\ = "\n";
-	(undef, undef, my @children) = $x->QueryTree($root);
+  {
+  local $\ = "\n";
+  (undef, undef, my @children) = $x->QueryTree($root);
 
-	# clean up %info
+  # clean up %info
 
-	my %children = map {$_, 1} @children;
-	for (grep !$children{$_}, keys %info)
-		{
-		warn "removing non-existing: $_\n", Dumper $info{$_};
-		delete $info{$_};
-		}
+  my %children = map {$_, 1} @children;
+  for (grep !$children{$_}, keys %info)
+    {
+    warn "removing non-existing: $_\n", Dumper $info{$_};
+    delete $info{$_};
+    }
 
-	my $newfilename = "$config{state_file}.new";
-	open my $ss, '>', $newfilename or warn("$! on $newfilename"), return;
-	print $ss $currentworkspace;
-	for (reverse @children)
-		{
-		next unless exists $info{$_};
-		my %attr = eval { $x->GetWindowAttributes($info{$_}{child}) };
-		#print "$_ $info{$_}{child} $info{$_}{title}\n$@" if $@;
-		next if $attr{map_state} eq 'Unmapped';
+  my $newfilename = "$config{state_file}.new";
+  open my $ss, '>', $newfilename or warn("$! on $newfilename"), return;
+  print $ss $currentworkspace;
+  for (reverse @children)
+    {
+    next unless exists $info{$_};
+    my %attr = eval { $x->GetWindowAttributes($info{$_}{child}) };
+    #print "$_ $info{$_}{child} $info{$_}{title}\n$@" if $@;
+    next if $attr{map_state} eq 'Unmapped';
 
-		# id workspace geometry title
-		print $ss "$_\t$info{$_}{workspace}\t$info{$_}{width}x$info{$_}{height}",
-			"+$info{$_}{x}+$info{$_}{y}\t$info{$_}{title}";
-		}
-	close $ss;
-	rename $newfilename, $config{state_file};
-	$save_count++;
-	}
+    # id workspace geometry title
+    print $ss "$_\t$info{$_}{workspace}\t$info{$_}{width}x$info{$_}{height}",
+      "+$info{$_}{x}+$info{$_}{y}\t$info{$_}{title}";
+    }
+  close $ss;
+  rename $newfilename, $config{state_file};
+  $save_count++;
+  }
 
 sub fixwindow
-	{
-	my $n = shift;
-	$n = oct $n if $n=~/^0/;
-	return $n;
-	}
+  {
+  my $n = shift;
+  $n = oct $n if $n=~/^0/;
+  return $n;
+  }
 
 sub makepixmap            # convert .xpm file to pixmap
-	{
-	my $filename = shift;
-	local $_;
+  {
+  my $filename = shift;
+  local $_;
 
-	open my $in, $filename or die "$! opening $filename";
-	$_ = <$in>;
-	$_ = <$in>;
-	$_ = <$in>;
-	$_ = <$in>;
-	my ($columns, $rows, $colors, $chars) = /\d+/g;
-	#print"c $columns r $rows col $colors ch $chars\n";
-	warn("oops, might not be xpm file"), return 0 unless $rows > 0;
+  open my $in, $filename or die "$! opening $filename";
+  $_ = <$in>;
+  $_ = <$in>;
+  $_ = <$in>;
+  $_ = <$in>;
+  my ($columns, $rows, $colors, $chars) = /\d+/g;
+  #print"c $columns r $rows col $colors ch $chars\n";
+  warn("oops, might not be xpm file"), return 0 unless $rows > 0;
 
-	my %colors;
-	my $data = '';
-	for my $i (1..$colors)
-		{
-		$_ = <$in>;
-		if( /"(.{$chars}) c #(\w{6})"/ )
-			{
-			$colors{$1} = pack 'V', hex $2;
-			}
-		elsif( /"(.{$chars}) c ([\w ]+)"/ )
-			{
-			$colors{$1} = colorbyname($2);
-			}
-		else
-			{
-			die "bad color $_";
-			}
-		}
-	<$in>=~/pixels/ or die "miscount to pixels";
+  my %colors;
+  my $data = '';
+  for my $i (1..$colors)
+    {
+    $_ = <$in>;
+    if( /"(.{$chars}) c #(\w{6})"/ )
+      {
+      $colors{$1} = pack 'V', hex $2;
+      }
+    elsif( /"(.{$chars}) c ([\w ]+)"/ )
+      {
+      $colors{$1} = colorbyname($2);
+      }
+    else
+      {
+      die "bad color $_";
+      }
+    }
+  <$in>=~/pixels/ or die "miscount to pixels";
 
-	# compute segments if too large
+  # compute segments if too large
 
-	my $lines_per = int( ($x->{maximum_request_length} - 24) / ($columns * 4));
+  my $lines_per = int( ($x->{maximum_request_length} - 24) / ($columns * 4));
 
-	$x->CreatePixmap(my $pix = $x->new_rsrc, $root, $x->root_depth,
-		$columns, $rows);
-	$x->CreateGC($tilegc = $x->new_rsrc, $root) unless $tilegc;
+  $x->CreatePixmap(my $pix = $x->new_rsrc, $root, $x->root_depth,
+    $columns, $rows);
+  $x->CreateGC($tilegc = $x->new_rsrc, $root) unless $tilegc;
 
-	my $startrow = 0;
-	for my $r (0..$rows-1)
-		{
-		if($r and $r % $lines_per == 0)
-			{
-			$x->PutImage($pix, $tilegc, $x->root_depth, $columns, $lines_per,
-				0, $startrow, 0, 'ZPixmap', $data);
-			$data = '';
-			$startrow += $lines_per;
-			#print "segment $startrow\n";
-			}
-		chomp;
-		$_ = <$in>;
-		/^"(.*)",?$/ or die "badly formatted line $_";
-		$data .= join '', @colors{$1 =~ /.{$chars}/g};
-		}
-	$x->PutImage($pix, $tilegc, $x->root_depth, $columns, $rows % $lines_per,
-		0, $startrow, 0, 'ZPixmap', $data) if length $data;
-	close $in;
+  my $startrow = 0;
+  for my $r (0..$rows-1)
+    {
+    if($r and $r % $lines_per == 0)
+      {
+      $x->PutImage($pix, $tilegc, $x->root_depth, $columns, $lines_per,
+        0, $startrow, 0, 'ZPixmap', $data);
+      $data = '';
+      $startrow += $lines_per;
+      #print "segment $startrow\n";
+      }
+    chomp;
+    $_ = <$in>;
+    /^"(.*)",?$/ or die "badly formatted line $_";
+    $data .= join '', @colors{$1 =~ /.{$chars}/g};
+    }
+  $x->PutImage($pix, $tilegc, $x->root_depth, $columns, $rows % $lines_per,
+    0, $startrow, 0, 'ZPixmap', $data) if length $data;
+  close $in;
 
-	return $pix;
-	}
+  return $pix;
+  }
 
 sub colorbyname
-	{
-	if(%namedcolors == 0)
-		{
-		open my $in, 'showrgb |' or die "$! opening showrgb pipe";
-		while(<$in>)
-			{
-			chomp;
-			my ($red, $green, $blue, $name) = split ' ', $_, 4;
-			$namedcolors{lc $name} = pack 'V', $red << 16 | $green << 8 | $blue;
-			}
-		close $in;
-		$namedcolors{'none'} = pack 'V', 0x808080;
-		}
-	my $input = shift;
-	my $ans = $namedcolors{lc $input};
-	$ans or warn "bad color name <$input>";
-	return $ans;
-	}
+  {
+  if(%namedcolors == 0)
+    {
+    open my $in, 'showrgb |' or die "$! opening showrgb pipe";
+    while(<$in>)
+      {
+      chomp;
+      my ($red, $green, $blue, $name) = split ' ', $_, 4;
+      $namedcolors{lc $name} = pack 'V', $red << 16 | $green << 8 | $blue;
+      }
+    close $in;
+    $namedcolors{'none'} = pack 'V', 0x808080;
+    }
+  my $input = shift;
+  my $ans = $namedcolors{lc $input};
+  $ans or warn "bad color name <$input>";
+  return $ans;
+  }
 
 sub get_tilefromfilename
-	{
-	my $filename = shift;
-	return ($tilecache{$filename} ||= makepixmap($filename));
-	}
+  {
+  my $filename = shift;
+  return ($tilecache{$filename} ||= makepixmap($filename));
+  }
 
 sub get_tileid
-	{
-	my $filename;
-	my $pmid = 0;
-	my $ws = shift;
-	open my $th, '<', $config{tile_file};
-	while(<$th>)
-		{
-		/^\Q$ws\E,(.*)/ and $filename = $1, last;
-		}
-	$filename or return 0;
-	return get_tilefromfilename($filename);
-	}
+  {
+  my $filename;
+  my $pmid = 0;
+  my $ws = shift;
+  open my $th, '<', $config{tile_file};
+  while(<$th>)
+    {
+    /^\Q$ws\E,(.*)/ and $filename = $1, last;
+    }
+  $filename or return 0;
+  return get_tilefromfilename($filename);
+  }
 
 sub get_wscolor
-	{
-	my $ws = shift;
-	open my $ch, '<', $config{color_file};
-	/(.*),\Q$ws\E$/ and return $1 while <$ch>;
-	return $config{root_color};
-	}
+  {
+  my $ws = shift;
+  open my $ch, '<', $config{color_file};
+  /(.*),\Q$ws\E$/ and return $1 while <$ch>;
+  return $config{root_color};
+  }
 
 sub change_bg
-	{
-	my ($ws, $color) = @_;
-	eval
-		{
-		my $pix = eval { get_tileid($ws) };
-		if($pix)
-			{
-			$x->ChangeWindowAttributes($root, background_pixmap => $pix);
-			}
-		else
-			{
-			$x->ChangeWindowAttributes($root, background_pixel => $color);
-			}
-		$x->ClearArea($root, 0, 0, 0, 0, 0);
-		}
-	}
+  {
+  my ($ws, $color) = @_;
+  eval
+    {
+    my $pix = eval { get_tileid($ws) };
+    if($pix)
+      {
+      $x->ChangeWindowAttributes($root, background_pixmap => $pix);
+      }
+    else
+      {
+      $x->ChangeWindowAttributes($root, background_pixel => $color);
+      }
+    $x->ClearArea($root, 0, 0, 0, 0, 0);
+    }
+  }
 
 sub fifo_cmd
-	{
-	local $_ = shift;
-	$fifocount++;
-	if(/^raiseover (\w+) (\w+)$/)
-		{
-		my $win = fixwindow $1;
-		my $sibling = fixwindow $2;
-		$x->ConfigureWindow($win, stack_mode => 'Above',
-			sibling => $sibling,);
-		}
-	elsif(/^raise (\w+)$/)
-		{
-		my $win = fixwindow $1;
-		$x->ConfigureWindow($win, stack_mode => 'Above');
-		}
-	elsif(/^lowerunder (\w+) (\w+)$/)
-		{
-		my $win = fixwindow $1;
-		my $sibling = fixwindow $2;
-		$x->ConfigureWindow($win, stack_mode => 'Below',
-			sibling => $sibling,);
-		}
-	elsif(/^lower (\w+)$/)
-		{
-		my $win = fixwindow $1;
-		$x->ConfigureWindow($win, stack_mode => 'Below');
-		}
-	elsif(/^xy (\w+) ([+-]?\d+) ([+-]?\d+)$/)
-		{
-		my $win = fixwindow $1;
-		if(exists $info{$win})
-			{
-			$info{$win}{x} = $2;
-			$info{$win}{y} = $3;
-			$x->ConfigureWindow($win, x => $2, y => $3);
-			}
-		}
-	elsif(/^movetocurrentws (\w+)$/)
-		{
-		my $win = fixwindow $1;
-		return if $info{$win}{workspace} eq $currentworkspace;
-		$info{$win}{workspace} = $currentworkspace;
-		put_workspace($win, $currentworkspace);
-		my %attr = $x->GetWindowAttributes($info{$win}{child});
-		$x->MapWindow($win) if $attr{map_state} eq 'Unviewable';
-		}
-	elsif(/^movetows (\w+) (.+)$/)
-		{
-		my $win = fixwindow $1;
-		my $ws = $2;
-		return if $info{$win}{workspace} eq $ws;
-		$ws eq $currentworkspace || $ws eq 'sticky'
-			? $x->MapWindow($win) : $x->UnmapWindow($win);
-		put_workspace($win, $ws);
-		$info{$win}{workspace} = $ws;
-		}
-	elsif(/^(?:setcurrent)?ws (.+)$/)
-		{
-		my $ws = $1;
-		return if $currentworkspace eq $ws;
-		my $slideright = $ws lt $currentworkspace;
+  {
+  local $_ = shift;
+  $fifocount++;
+  if(/^raiseover (\w+) (\w+)$/)
+    {
+    my $win = fixwindow $1;
+    my $sibling = fixwindow $2;
+    $x->ConfigureWindow($win, stack_mode => 'Above',
+      sibling => $sibling,);
+    }
+  elsif(/^raise (\w+)$/)
+    {
+    my $win = fixwindow $1;
+    $x->ConfigureWindow($win, stack_mode => 'Above');
+    }
+  elsif(/^lowerunder (\w+) (\w+)$/)
+    {
+    my $win = fixwindow $1;
+    my $sibling = fixwindow $2;
+    $x->ConfigureWindow($win, stack_mode => 'Below',
+      sibling => $sibling,);
+    }
+  elsif(/^lower (\w+)$/)
+    {
+    my $win = fixwindow $1;
+    $x->ConfigureWindow($win, stack_mode => 'Below');
+    }
+  elsif(/^xy (\w+) ([+-]?\d+) ([+-]?\d+)$/)
+    {
+    my $win = fixwindow $1;
+    if(exists $info{$win})
+      {
+      $info{$win}{x} = $2;
+      $info{$win}{y} = $3;
+      $x->ConfigureWindow($win, x => $2, y => $3);
+      }
+    }
+  elsif(/^movetocurrentws (\w+)$/)
+    {
+    my $win = fixwindow $1;
+    return if $info{$win}{workspace} eq $currentworkspace;
+    $info{$win}{workspace} = $currentworkspace;
+    put_workspace($win, $currentworkspace);
+    my %attr = $x->GetWindowAttributes($info{$win}{child});
+    $x->MapWindow($win) if $attr{map_state} eq 'Unviewable';
+    }
+  elsif(/^movetows (\w+) (.+)$/)
+    {
+    my $win = fixwindow $1;
+    my $ws = $2;
+    return if $info{$win}{workspace} eq $ws;
+    $ws eq $currentworkspace || $ws eq 'sticky'
+      ? $x->MapWindow($win) : $x->UnmapWindow($win);
+    put_workspace($win, $ws);
+    $info{$win}{workspace} = $ws;
+    }
+  elsif(/^(?:setcurrent)?ws (.+)$/)
+    {
+    my $ws = $1;
+    return if $currentworkspace eq $ws;
+    my $slideright = $ws lt $currentworkspace;
 
-		# move sticky's to front
-		(undef, undef, my @children) = $x->QueryTree($root);
-		my $nextwin;
-		for my $win (reverse @children)
-			{
-			next unless exists $info{$win} and
-				$info{$win}{workspace} eq 'sticky';
-			if($nextwin)
-				{
-				$x->ConfigureWindow($win, stack_mode => 'Below',
-					sibling => $nextwin);
-				}
-			else
-				{
-				$x->ConfigureWindow($win, stack_mode => 'Above');
-				}
-			$nextwin = $win;
-			}
+    # move sticky's to front
+    (undef, undef, my @children) = $x->QueryTree($root);
+    my $nextwin;
+    for my $win (reverse @children)
+      {
+      next unless exists $info{$win} and
+        $info{$win}{workspace} eq 'sticky';
+      if($nextwin)
+        {
+        $x->ConfigureWindow($win, stack_mode => 'Below',
+          sibling => $nextwin);
+        }
+      else
+        {
+        $x->ConfigureWindow($win, stack_mode => 'Above');
+        }
+      $nextwin = $win;
+      }
 
-		# put up shield
+    # put up shield
 
-		if($nextwin)
-			{
-			$x->ConfigureWindow($shield, x => 0, y => 0,
-				stack_mode => 'Below', sibling => $nextwin);
-			}
-		else
-			{
-			$x->ConfigureWindow($shield, stack_mode => 'Above', x => 0, y => 0);
-			}
-		$x->ShapeMask($shield, 'Bounding', 'Set', 0, 0, 'None');
-		$x->MapWindow($shield);
+    if($nextwin)
+      {
+      $x->ConfigureWindow($shield, x => 0, y => 0,
+        stack_mode => 'Below', sibling => $nextwin);
+      }
+    else
+      {
+      $x->ConfigureWindow($shield, stack_mode => 'Above', x => 0, y => 0);
+      }
+    $x->ShapeMask($shield, 'Bounding', 'Set', 0, 0, 'None');
+    $x->MapWindow($shield);
 
-		for my $win (keys %info)
-			{
-			if($info{$win}{workspace} eq $currentworkspace)
-				{
-				$x->UnmapWindow($win) unless $currentworkspace eq 'sticky';;
-				}
-			elsif($info{$win}{workspace} eq $ws)
-				{
-				my %attr = $x->GetWindowAttributes($info{$win}{child});
-				$x->MapWindow($win) if $attr{map_state} eq 'Unviewable';
-				}
-			}
-		put_workspace($root, $currentworkspace = $ws);
-		my $color = eval { getcolor(get_wscolor($ws)) };
-		change_bg($ws, $color);
-		put_bgcolor($color);
+    for my $win (keys %info)
+      {
+      if($info{$win}{workspace} eq $currentworkspace)
+        {
+        $x->UnmapWindow($win) unless $currentworkspace eq 'sticky';;
+        }
+      elsif($info{$win}{workspace} eq $ws)
+        {
+        my %attr = $x->GetWindowAttributes($info{$win}{child});
+        $x->MapWindow($win) if $attr{map_state} eq 'Unviewable';
+        }
+      }
+    put_workspace($root, $currentworkspace = $ws);
+    my $color = eval { getcolor(get_wscolor($ws)) };
+    change_bg($ws, $color);
+    put_bgcolor($color);
 
-		# drop shield
+    # drop shield
 
-		if($shieldstep < 1) # no dissolve, just quick change
-			{
-			}
-		elsif($zoom) # oval dissolve
-			{
-			if(not defined $pxshield)
-				{
-				$x->CreatePixmap($pxshield = $x->new_rsrc, $shield, 1,
-					$root_geo{width}, $root_geo{height});
-				$x->CreateGC($gcshield = $x->new_rsrc, $pxshield);
-				}
-			$x->ChangeGC($gcshield, foreground => 1);
-			$x->PolyFillRectangle($pxshield, $gcshield,
-				[0, 0, $root_geo{width}, $root_geo{height}]);
-			$x->ChangeGC($gcshield, foreground => 0);
+    if($shieldstep < 1) # no dissolve, just quick change
+      {
+      }
+    elsif($zoom) # oval dissolve
+      {
+      if(not defined $pxshield)
+        {
+        $x->CreatePixmap($pxshield = $x->new_rsrc, $shield, 1,
+          $root_geo{width}, $root_geo{height});
+        $x->CreateGC($gcshield = $x->new_rsrc, $pxshield);
+        }
+      $x->ChangeGC($gcshield, foreground => 1);
+      $x->PolyFillRectangle($pxshield, $gcshield,
+        [0, 0, $root_geo{width}, $root_geo{height}]);
+      $x->ChangeGC($gcshield, foreground => 0);
 
-			my $xmid = $root_geo{width} / 2;
-			my $ymid = $root_geo{height} / 2;
-			my $xstep = int $root_geo{width} * 0.6 / $shieldstep;
-			my $ystep = int $root_geo{height} * 0.6 / $shieldstep;
+      my $xmid = $root_geo{width} / 2;
+      my $ymid = $root_geo{height} / 2;
+      my $xstep = int $root_geo{width} * 0.6 / $shieldstep;
+      my $ystep = int $root_geo{height} * 0.6 / $shieldstep;
 
-			$x->GrabServer;
-			for my $step (1..$shieldstep)
-				{
-				#$x->PolyFillArc($pxshield, $gcshield,
-				#	[$xmid - $step * $xstep, $ymid - $step * $ystep,
-				#	2 * $step * $xstep, 2 * $step * $ystep, 0, 360*64]);
+      $x->GrabServer;
+      for my $step (1..$shieldstep)
+        {
+        #$x->PolyFillArc($pxshield, $gcshield,
+        # [$xmid - $step * $xstep, $ymid - $step * $ystep,
+        # 2 * $step * $xstep, 2 * $step * $ystep, 0, 360*64]);
 
-				$x->PolyFillRectangle($pxshield, $gcshield,
-					[$xmid - $step * $xstep, $ymid - $step * $ystep,
-					2 * $step * $xstep, 2 * $step * $ystep]);
+        $x->PolyFillRectangle($pxshield, $gcshield,
+          [$xmid - $step * $xstep, $ymid - $step * $ystep,
+          2 * $step * $xstep, 2 * $step * $ystep]);
 
-				$x->ShapeMask($shield, 'Bounding', 'Set', 0, 0, $pxshield);
-				$x->flush;
-				}
-			$x->UngrabServer;
-			}
-		elsif(0)
-			{
-			my $xstep = $root_geo{width} / $shieldstep;
-			for my $step (1..$shieldstep)
-				{
-				$x->ConfigureWindow($shield,
-					x => ($slideright ? -1 : 1) * int $step * $xstep);
-				}
-			}
-		else # drops old workspace down
-			{
-			my $ystep = $root_geo{height} / $shieldstep;
-			for my $step (1..$shieldstep)
-				{
-				$x->ConfigureWindow($shield, y => int $step * $ystep);
-				#$x->flush;
-				}
-			}
-		$x->UnmapWindow($shield);
-		}
-	elsif(/^zoom (\d+)$/)
-		{
-		$zoom = $1;
-		}
-	elsif(/^shieldstep (\d+)$/)
-		{
-		$shieldstep = $1 < 30 ? $1 : 30;
-		}
-	elsif(/^bg (.+)$/)
-		{
-		$x->ChangeWindowAttributes($root, background_pixel => getcolor($1));
-		$x->ClearArea($root, 0, 0, 0, 0, 0);
-		}
-	elsif(/^stopkeys$/)
-		{
-		$x->UngrabKey(split(','), $root) for keys %keyactions;
-		%keyactions = ();
-		}
-	elsif(/^solid$/)
-		{
-		$solid = 1;
-		$transparent = 0;
-		$redrawall++;
-		}
-	elsif(/^tabs$/)
-		{
-		$solid = 0;
-		$transparent = 0;
-		$redrawall++;
-		}
-	elsif(/^transparent$/)
-		{
-		$solid = 0;
-		$transparent = 1;
-		$redrawall++;
-		}
-	elsif(/^splash$/)
-		{
-		draw_splash;
-		}
-	else
-		{
-		warn "$0: CMD: <$_> not valid";
-		}
-	$changedstate++;
-	}
+        $x->ShapeMask($shield, 'Bounding', 'Set', 0, 0, $pxshield);
+        $x->flush;
+        }
+      $x->UngrabServer;
+      }
+    elsif(0)
+      {
+      my $xstep = $root_geo{width} / $shieldstep;
+      for my $step (1..$shieldstep)
+        {
+        $x->ConfigureWindow($shield,
+          x => ($slideright ? -1 : 1) * int $step * $xstep);
+        }
+      }
+    else # drops old workspace down
+      {
+      my $ystep = $root_geo{height} / $shieldstep;
+      for my $step (1..$shieldstep)
+        {
+        $x->ConfigureWindow($shield, y => int $step * $ystep);
+        #$x->flush;
+        }
+      }
+    $x->UnmapWindow($shield);
+    }
+  elsif(/^zoom (\d+)$/)
+    {
+    $zoom = $1;
+    }
+  elsif(/^shieldstep (\d+)$/)
+    {
+    $shieldstep = $1 < 30 ? $1 : 30;
+    }
+  elsif(/^bg (.+)$/)
+    {
+    $x->ChangeWindowAttributes($root, background_pixel => getcolor($1));
+    $x->ClearArea($root, 0, 0, 0, 0, 0);
+    }
+  elsif(/^stopkeys$/)
+    {
+    $x->UngrabKey(split(','), $root) for keys %keyactions;
+    %keyactions = ();
+    }
+  elsif(/^solid$/)
+    {
+    $solid = 1;
+    $transparent = 0;
+    $redrawall++;
+    }
+  elsif(/^tabs$/)
+    {
+    $solid = 0;
+    $transparent = 0;
+    $redrawall++;
+    }
+  elsif(/^transparent$/)
+    {
+    $solid = 0;
+    $transparent = 1;
+    $redrawall++;
+    }
+  elsif(/^splash$/)
+    {
+    draw_splash;
+    }
+  else
+    {
+    warn "$0: CMD: <$_> not valid";
+    }
+  $changedstate++;
+  }
 
 sub findgesture
-	{
-	my ($dx, $dy) = ($e{root_x} - $ox, $e{root_y} - $oy);
-	my $direction;
-	if(sqrt($dx ** 2 + $dy ** 2) <= 1.41 * $config{gesture_size})
-		{
-		$direction = 'still';
-		}
-	elsif(abs $dx >= abs $dy)
-		{
-		$direction = $dx < 0 ? 'left' : 'right'
-		}
-	else
-		{
-		$direction = $dy < 0 ? 'up' : 'down'
-		}
-	my $ans = "gesture_${gesturebutton}_$direction";
-	return $config{$ans};
-	}
+  {
+  my ($dx, $dy) = ($e{root_x} - $ox, $e{root_y} - $oy);
+  my $direction;
+  if(sqrt($dx ** 2 + $dy ** 2) <= 1.41 * $config{gesture_size})
+    {
+    $direction = 'still';
+    }
+  elsif(abs $dx >= abs $dy)
+    {
+    $direction = $dx < 0 ? 'left' : 'right'
+    }
+  else
+    {
+    $direction = $dy < 0 ? 'up' : 'down'
+    }
+  my $ans = "gesture_${gesturebutton}_$direction";
+  return $config{$ans};
+  }
 
 ######################################## EVENT subs go here
 
 sub EVENT::KeyPress
-	{
-	$x->UngrabKeyboard('CurrentTime');
-	$x->AllowEvents('AsyncPointer', 'CurrentTime');
-	#print STDERR "key $e{detail} $e{state} was pressed\n";
-	my $command = $keyactions{"$e{detail},$e{state}"} or return;
-	forkcmd($command);
-	}
+  {
+  $x->UngrabKeyboard('CurrentTime');
+  $x->AllowEvents('AsyncPointer', 'CurrentTime');
+  #print STDERR "key $e{detail} $e{state} was pressed\n";
+  my $command = $keyactions{"$e{detail},$e{state}"} or return;
+  forkcmd($command);
+  }
 
 sub EVENT::KeyRelease { }
 
 sub EVENT::MotionNotify
-	{
-	if($e{state} == 0)
-		{
-		@edge = @e{'root_x', 'root_y'};
-		$armed = 1 if $e{root_x} > $rearm && $e{root_y} > $rearm &&
-			$e{root_x} < $root_geo{width} - $rearm &&
-			$e{root_y} < $root_geo{height} - $rearm;
-		}
-	if($event == $root) # in root
-		{
-		my $newgesture = findgesture();
-		if($newgesture ne $currentgesture)
-			{
-			$currentgesture = $newgesture;
-			draw_gesturemenu();
-			}
-		}
-	elsif($resizemode == 1)
-		{
-		my $new_width = forcewidth $e{event_x} + $ox;
-		my $new_height = $deltah + forceheight $e{event_y} + $oy - $deltah;
-		$x->ConfigureWindow($event, width => $new_width, height => $new_height);
-		$info{$event}{width} = $new_width;
-		$info{$event}{height} = $new_height;
-		}
-	elsif($resizemode == 2)
-		{
-		my $new_width = forcewidth $info{$event}{width}
-			- $e{event_x} - $ox + $startwidth;
-		my $new_height = $deltah + forceheight $e{event_y} + $oy - $deltah;
-		$x->ConfigureWindow($event, width => $new_width, height => $new_height,
-			x => $posx - $new_width,
-			);
-		$info{$event}{width} = $new_width;
-		$info{$event}{height} = $new_height;
-		$info{$event}{x} = $posx - $new_width;
-		}
-	else # move window
-		{
-		my $new_y = $e{root_y} - $oy;
-		$new_y = $maxy if $new_y > $maxy;
-		$x->ConfigureWindow($event, x => $e{root_x} - $ox, y => $new_y);
-		$info{$event}{x} = $e{root_x} - $ox;
-		$info{$event}{y} = $new_y;
-		}
-	}
+  {
+  if($e{state} == 0)
+    {
+    @edge = @e{'root_x', 'root_y'};
+    $armed = 1 if $e{root_x} > $rearm && $e{root_y} > $rearm &&
+      $e{root_x} < $root_geo{width} - $rearm &&
+      $e{root_y} < $root_geo{height} - $rearm;
+    }
+  if($event == $root) # in root
+    {
+    my $newgesture = findgesture();
+    if($newgesture ne $currentgesture)
+      {
+      $currentgesture = $newgesture;
+      draw_gesturemenu();
+      }
+    }
+  elsif($resizemode == 1)
+    {
+    my $new_width = forcewidth $e{event_x} + $ox;
+    my $new_height = $deltah + forceheight $e{event_y} + $oy - $deltah;
+    $x->ConfigureWindow($event, width => $new_width, height => $new_height);
+    $info{$event}{width} = $new_width;
+    $info{$event}{height} = $new_height;
+    }
+  elsif($resizemode == 2)
+    {
+    my $new_width = forcewidth $info{$event}{width}
+      - $e{event_x} - $ox + $startwidth;
+    my $new_height = $deltah + forceheight $e{event_y} + $oy - $deltah;
+    $x->ConfigureWindow($event, width => $new_width, height => $new_height,
+      x => $posx - $new_width,
+      );
+    $info{$event}{width} = $new_width;
+    $info{$event}{height} = $new_height;
+    $info{$event}{x} = $posx - $new_width;
+    }
+  else # move window
+    {
+    my $new_y = $e{root_y} - $oy;
+    $new_y = $maxy if $new_y > $maxy;
+    $x->ConfigureWindow($event, x => $e{root_x} - $ox, y => $new_y);
+    $info{$event}{x} = $e{root_x} - $ox;
+    $info{$event}{y} = $new_y;
+    }
+  }
 
 sub EVENT::ButtonPress
-	{
-	if($event == $root)
-		{
-		($ox, $oy) = ($e{root_x}, $e{root_y});
-		$gesturebutton = $button;
-		$currentgesture = findgesture();
-		$x->ConfigureWindow($gesturemenu, stack_mode => 'Above',
-			x => $ox - 3 * $config{gesture_size},
-			y => $oy - 3 * $config{gesture_size});
-		$x->MapWindow($gesturemenu);
-		}
-	elsif($button == 1)
-		{
-		$maxvmode = 0;
-		$resizemode = 0;
-		$x->ConfigureWindow($event, stack_mode => 'Above');
-		my %v = $x->GetGeometry($event);
-		if($e{event_x} > $v{width} - $resizewidth &&
-			$e{event_y} > $v{height} - $bottom)
-			{
-			$resizemode = 1;
-			$ox = $v{width} - $e{event_x};
-			$oy = $v{height} - $e{event_y};
-			getbaseinc $info{$event}{child};
-			}
-		elsif($e{event_x} < $resizewidth &&
-			$e{event_y} > $v{height} - $bottom)
-			{
-			$resizemode = 2;
-			$ox = $v{width} - $e{event_x};
-			$oy = $v{height} - $e{event_y};
-			$posx = $v{x} + $v{width};
-			$startwidth = $v{width};
-			getbaseinc $info{$event}{child};
-			}
-		else
-			{
-			$ox = $e{event_x} + $config{frame_border};
-			$oy = $e{event_y} + $config{frame_border};
-			}
-		}
-	elsif($button == 2)
-		{
-		if($e{state} & 0x100)  # but 1 down
-			{
-			$maxvmode = 1;
-			}
-		else
-			{
-			$ox = $e{root_x};
-			$oy = $e{root_y};
-			getbaseinc $info{$event}{child};
-			$maxvmode = 0;
-			}
-		}
-	elsif($button == 3)
-		{
-		$ox = $e{root_x};
-		$oy = $e{root_y};
-		$x->ConfigureWindow($stopsign, stack_mode => 'Above',
-			x => $ox - $config{gesture_size},
-			y => $oy - $config{gesture_size});
-		$x->MapWindow($stopsign);
-		}
-	}
+  {
+  if($event == $root)
+    {
+    ($ox, $oy) = ($e{root_x}, $e{root_y});
+    $gesturebutton = $button;
+    $currentgesture = findgesture();
+    $x->ConfigureWindow($gesturemenu, stack_mode => 'Above',
+      x => $ox - 3 * $config{gesture_size},
+      y => $oy - 3 * $config{gesture_size});
+    $x->MapWindow($gesturemenu);
+    }
+  elsif($button == 1)
+    {
+    $maxvmode = 0;
+    $resizemode = 0;
+    $x->ConfigureWindow($event, stack_mode => 'Above');
+    my %v = $x->GetGeometry($event);
+    if($e{event_x} > $v{width} - $resizewidth &&
+      $e{event_y} > $v{height} - $bottom)
+      {
+      $resizemode = 1;
+      $ox = $v{width} - $e{event_x};
+      $oy = $v{height} - $e{event_y};
+      getbaseinc $info{$event}{child};
+      }
+    elsif($e{event_x} < $resizewidth &&
+      $e{event_y} > $v{height} - $bottom)
+      {
+      $resizemode = 2;
+      $ox = $v{width} - $e{event_x};
+      $oy = $v{height} - $e{event_y};
+      $posx = $v{x} + $v{width};
+      $startwidth = $v{width};
+      getbaseinc $info{$event}{child};
+      }
+    else
+      {
+      $ox = $e{event_x} + $config{frame_border};
+      $oy = $e{event_y} + $config{frame_border};
+      }
+    }
+  elsif($button == 2)
+    {
+    if($e{state} & 0x100)  # but 1 down
+      {
+      $maxvmode = 1;
+      }
+    else
+      {
+      $ox = $e{root_x};
+      $oy = $e{root_y};
+      getbaseinc $info{$event}{child};
+      $maxvmode = 0;
+      }
+    }
+  elsif($button == 3)
+    {
+    $ox = $e{root_x};
+    $oy = $e{root_y};
+    $x->ConfigureWindow($stopsign, stack_mode => 'Above',
+      x => $ox - $config{gesture_size},
+      y => $oy - $config{gesture_size});
+    $x->MapWindow($stopsign);
+    }
+  }
 
 sub EVENT::ButtonRelease
-	{
-	$changedstate++;
-	if($event == $root) # moved here for gesturing
-		{
-		$x->UnmapWindow($gesturemenu);
-		$currentgesture = '';
-		if($button == 2 and ($e{state} & 0xFF) == 8)	# ALT modifier
-			{
-			$more = 0;
-			}
-		else
-			{
-			runcommand(findgesture());
-			}
-		}
-	elsif($button == 1)
-		{
-		return unless exists $info{$event};
-		return unless my $child = $info{$event}{child};
-		if($maxvmode)	# full height
-			{
-			$x->ConfigureWindow($event, y => 0,
-				height => $root_geo{height} - 2 * $config{frame_border});
-			$resizemode = 1;
-			}
-		if($resizemode)
-			{
-			move_configure $event;
-			}
-		if(!$resizemode || $maxvmode)
-			{
-			notifychild $event;
-			}
-		}
-	elsif($button == 2)
-		{
-		if(not $maxvmode)
-			{
-			if(abs($e{root_x} - $ox) > $config{gesture_size} &&
-				abs($e{root_x} - $ox) > abs($e{root_y} - $oy))
-				{
-				$x->ConfigureWindow($event, x => 0,
-					width => $root_geo{width} - 2 * $config{frame_border});
-				move_configure $event;
-				notifychild $event;
-				}
-			elsif(abs($e{root_y} - $oy) > $config{gesture_size})
-				{
-				$x->ConfigureWindow($event, y => 0,
-					height => $root_geo{height} - 2 * $config{frame_border});
-				move_configure $event;
-				notifychild $event;
-				}
-			else
-				{
-				$x->ConfigureWindow($event, stack_mode => 'Below');
-				}
-			}
-		}
-	elsif($button == 3)
-		{
-		if(abs($e{root_x} - $ox) < $config{gesture_size} &&
-			abs($e{root_y} - $oy) < $config{gesture_size} &&
-			exists $info{$event})
-			{
-			if(($e{state} & 0xFF) == 12)	# CTL+ALT modifiers
-				{
-				$x->KillClient($info{$event}{child});
-				}
-			else
-				{
-				my ($val) = $x->GetProperty($info{$event}{child},
-					$x->atom('WM_PROTOCOLS'), $x->atom('ATOM'), 0, 5*4, 0);
-				my @protos = unpack 'LLLLL', $val;
-				my $want = $x->atom('WM_DELETE_WINDOW');
-				if(grep $_ == $want, @protos)
-					{
-					$x->SendEvent($info{$event}{child}, 0, $x->pack_event_mask(),
-						$x->pack_event(
-						'name' => 'ClientMessage',
-						'window' => $info{$event}{child},
-						'type' => $x->atom('WM_PROTOCOLS'),
-						'format' => 32,
-						'data' => pack('LLLLL', $want, 0, 0, 0, 0),
-						));
-					$x->flush; # trying to stop "bad focus" notices
-					}
-				else
-					{
-					$x->DestroyWindow($event);
-					}
-				}
-			}
-		$x->UnmapWindow($stopsign); # last to try to avoid focus errors
-		}
-	}
+  {
+  $changedstate++;
+  if($event == $root) # moved here for gesturing
+    {
+    $x->UnmapWindow($gesturemenu);
+    $currentgesture = '';
+    if($button == 2 and ($e{state} & 0xFF) == 8)  # ALT modifier
+      {
+      $more = 0;
+      }
+    else
+      {
+      runcommand(findgesture());
+      }
+    }
+  elsif($button == 1)
+    {
+    return unless exists $info{$event};
+    return unless my $child = $info{$event}{child};
+    if($maxvmode) # full height
+      {
+      $x->ConfigureWindow($event, y => 0,
+        height => $root_geo{height} - 2 * $config{frame_border});
+      $resizemode = 1;
+      }
+    if($resizemode)
+      {
+      move_configure $event;
+      }
+    if(!$resizemode || $maxvmode)
+      {
+      notifychild $event;
+      }
+    }
+  elsif($button == 2)
+    {
+    if(not $maxvmode)
+      {
+      if(abs($e{root_x} - $ox) > $config{gesture_size} &&
+        abs($e{root_x} - $ox) > abs($e{root_y} - $oy))
+        {
+        $x->ConfigureWindow($event, x => 0,
+          width => $root_geo{width} - 2 * $config{frame_border});
+        move_configure $event;
+        notifychild $event;
+        }
+      elsif(abs($e{root_y} - $oy) > $config{gesture_size})
+        {
+        $x->ConfigureWindow($event, y => 0,
+          height => $root_geo{height} - 2 * $config{frame_border});
+        move_configure $event;
+        notifychild $event;
+        }
+      else
+        {
+        $x->ConfigureWindow($event, stack_mode => 'Below');
+        }
+      }
+    }
+  elsif($button == 3)
+    {
+    if(abs($e{root_x} - $ox) < $config{gesture_size} &&
+      abs($e{root_y} - $oy) < $config{gesture_size} &&
+      exists $info{$event})
+      {
+      if(($e{state} & 0xFF) == 12)  # CTL+ALT modifiers
+        {
+        $x->KillClient($info{$event}{child});
+        }
+      else
+        {
+        my ($val) = $x->GetProperty($info{$event}{child},
+          $x->atom('WM_PROTOCOLS'), $x->atom('ATOM'), 0, 5*4, 0);
+        my @protos = unpack 'LLLLL', $val;
+        my $want = $x->atom('WM_DELETE_WINDOW');
+        if(grep $_ == $want, @protos)
+          {
+          $x->SendEvent($info{$event}{child}, 0, $x->pack_event_mask(),
+            $x->pack_event(
+            'name' => 'ClientMessage',
+            'window' => $info{$event}{child},
+            'type' => $x->atom('WM_PROTOCOLS'),
+            'format' => 32,
+            'data' => pack('LLLLL', $want, 0, 0, 0, 0),
+            ));
+          $x->flush; # trying to stop "bad focus" notices
+          }
+        else
+          {
+          $x->DestroyWindow($event);
+          }
+        }
+      }
+    $x->UnmapWindow($stopsign); # last to try to avoid focus errors
+    }
+  }
 
 sub EVENT::Expose
-	{
-	return if $e{count};
-	draw_stopsign(), return if $window == $stopsign;
-	draw_gesturemenu(), return if $window == $gesturemenu;
-	return unless exists $info{$window};
-	return unless $info{$window}{title};
-	draw_deco $window;
-	}
+  {
+  return if $e{count};
+  draw_stopsign(), return if $window == $stopsign;
+  draw_gesturemenu(), return if $window == $gesturemenu;
+  return unless exists $info{$window};
+  return unless $info{$window}{title};
+  draw_deco $window;
+  }
 
 sub EVENT::ConfigureRequest
-	{
-	if($e{parent} == $root)
-		{
-		$x->ConfigureWindow($window,
-			exists($e{x}) ? (x => $e{x}) : (),
-			exists($e{y}) ? (y => $e{y}) : (),
-			exists($e{width}) ? (width => $e{width}) : (),
-			exists($e{height}) ? (height => $e{height}) : (),
-			exists($e{border_width}) ? (border_width => $e{border_width}) : (),
-			exists($e{stack_mode}) ? (stack_mode => $e{stack_mode}) : (),
-			exists($e{sibling}) ? (sibling => $e{sibling}) : (),
-			);
-		if(exists $info{$window})
-			{
-			$info{$window}{width} = $e{width} if exists $e{width};
-			$info{$window}{height} = $e{height} if exists $e{height};
-			}
-		}
-	$changedstate++;
-	}
+  {
+  if($e{parent} == $root)
+    {
+    $x->ConfigureWindow($window,
+      exists($e{x}) ? (x => $e{x}) : (),
+      exists($e{y}) ? (y => $e{y}) : (),
+      exists($e{width}) ? (width => $e{width}) : (),
+      exists($e{height}) ? (height => $e{height}) : (),
+      exists($e{border_width}) ? (border_width => $e{border_width}) : (),
+      exists($e{stack_mode}) ? (stack_mode => $e{stack_mode}) : (),
+      exists($e{sibling}) ? (sibling => $e{sibling}) : (),
+      );
+    if(exists $info{$window})
+      {
+      $info{$window}{width} = $e{width} if exists $e{width};
+      $info{$window}{height} = $e{height} if exists $e{height};
+      }
+    }
+  $changedstate++;
+  }
 
 sub EVENT::ConfigureNotify
-	{
-	if(exists $info{$event} && $info{$event}{child} == $window)
-		{
-		my %vw = $x->GetGeometry($window);
-		my %ve = $x->GetGeometry($event);
-		if($ve{width} != $vw{width} or
-			$ve{height} != $vw{height} - $deltah)
-			{
-			$x->ConfigureWindow($event, width => $vw{width},
-				height => $vw{height} + $deltah);
-			$info{$event}{width} = $vw{width};
-			$info{$event}{height} = $vw{height} + $deltah;
-			}
-		if($e{x} != 0 or $e{y} != $labelheight)
-			{
-			$x->ConfigureWindow($window, x => 0, y => $labelheight);
-			}
-		}
-	$changedstate++;
-	}
+  {
+  if(exists $info{$event} && $info{$event}{child} == $window)
+    {
+    my %vw = $x->GetGeometry($window);
+    my %ve = $x->GetGeometry($event);
+    if($ve{width} != $vw{width} or
+      $ve{height} != $vw{height} - $deltah)
+      {
+      $x->ConfigureWindow($event, width => $vw{width},
+        height => $vw{height} + $deltah);
+      $info{$event}{width} = $vw{width};
+      $info{$event}{height} = $vw{height} + $deltah;
+      }
+    if($e{x} != 0 or $e{y} != $labelheight)
+      {
+      $x->ConfigureWindow($window, x => 0, y => $labelheight);
+      }
+    }
+  $changedstate++;
+  }
 
 sub EVENT::ReparentNotify
-	{
-	$changedstate++;
-	}
+  {
+  $changedstate++;
+  }
 
 sub EVENT::CreateNotify
-	{
-	$changedstate++;
-	}
+  {
+  $changedstate++;
+  }
 
 sub EVENT::PropertyNotify
-	{
-	return unless $e{atom} == $x->atom('WM_NAME');
-	return unless $e{state} eq 'NewValue';
-	return unless my $deco = get_deco $window;;
-	my ($title) =  $x->GetProperty($window,
-		$x->atom('WM_NAME'), $x->atom('STRING'), 0, 100, 0);
-	$info{$deco}{title} = $title ||= sprintf 'RicksWM - %X', $window;
-	$info{$deco}{size} = textwidth($title);
-	$x->ChangeProperty($deco, $x->atom('WM_NAME'),
-		$x->atom('STRING'), 8, 'Replace', $title);
-	draw_deco $deco;
-	$changedstate++;
-	}
+  {
+  return unless $e{atom} == $x->atom('WM_NAME');
+  return unless $e{state} eq 'NewValue';
+  return unless my $deco = get_deco $window;;
+  my ($title) =  $x->GetProperty($window,
+    $x->atom('WM_NAME'), $x->atom('STRING'), 0, 100, 0);
+  $info{$deco}{title} = $title ||= sprintf 'RicksWM - %X', $window;
+  $info{$deco}{size} = textwidth($title);
+  $x->ChangeProperty($deco, $x->atom('WM_NAME'),
+    $x->atom('STRING'), 8, 'Replace', $title);
+  draw_deco $deco;
+  $changedstate++;
+  }
 
 sub EVENT::EnterNotify
-	{
-	return if $e{detail} eq 'Inferior';
-	return unless exists $info{$event} and $info{$event}{child};
-	$x->SetInputFocus($info{$event}{child}, 'PointerRoot', 'CurrentTime');
-	local($x->{'error_handler'}) = sub
-		{
-		my ($self, $data) = @_;
-		my $msg = $self->format_error_msg($data);
-		if($msg =~ /SetInputFocus/)
-			{
-			#warn "note: Focus to closed window\n";
-			}
-		else
-			{
-			croak($msg);
-			}
-		};
-	my ($win) = $x->GetInputFocus; # dummy for error ignoring
-	}
+  {
+  return if $e{detail} eq 'Inferior';
+  return unless exists $info{$event} and $info{$event}{child};
+  $x->SetInputFocus($info{$event}{child}, 'PointerRoot', 'CurrentTime');
+  local($x->{'error_handler'}) = sub
+    {
+    my ($self, $data) = @_;
+    my $msg = $self->format_error_msg($data);
+    if($msg =~ /SetInputFocus/)
+      {
+      #warn "note: Focus to closed window\n";
+      }
+    else
+      {
+      croak($msg);
+      }
+    };
+  my ($win) = $x->GetInputFocus; # dummy for error ignoring
+  }
 
 sub EVENT::FocusIn
-	{
-	$focus = $event;
-	draw_deco $event;
-	}
+  {
+  $focus = $event;
+  draw_deco $event;
+  }
 
 sub EVENT::FocusOut
-	{
-	$focus = '';
-	draw_deco $event;
-	}
+  {
+  $focus = '';
+  draw_deco $event;
+  }
 
 sub EVENT::DestroyNotify
-	{
-	if($info{$event}{child})
-		{
-		$x->DestroyWindow($event);
-		}
-	delete $info{$event};
-	push @wid_stack, $event;
-	$changedstate++;
-	}
+  {
+  if($info{$event}{child})
+    {
+    $x->DestroyWindow($event);
+    }
+  delete $info{$event};
+  push @wid_stack, $event;
+  $changedstate++;
+  }
 
 sub EVENT::MapNotify # FIXME should use {workspace} field
-	{
-	if(exists $info{$event} && $info{$event}{child} == $window)
-		{
-		my $workspace = get_workspace($event);
-		if( $workspace eq 'sticky' or $workspace eq get_workspace() or
-			$info{$event}{transient} > 0 &&
-			get_workspace(get_deco $info{$event}{transient}) eq get_workspace()
-			)
-			{
-			$x->MapWindow($event);
-			$x->ConfigureWindow($event,
-				stack_mode => $workspace eq 'sticky' ? 'Above' : 'Below');
-			$changedstate++;
-			}
-		return if $e{override_redirect};
-		$x->ConfigureWindow($event, stack_mode => 'Above');
-		$x->ConfigureWindow($window, x => 0, y => $labelheight);
-		$changedstate++;
-		}
-	}
+  {
+  if(exists $info{$event} && $info{$event}{child} == $window)
+    {
+    my $workspace = get_workspace($event);
+    if( $workspace eq 'sticky' or $workspace eq get_workspace() or
+      $info{$event}{transient} > 0 &&
+      get_workspace(get_deco $info{$event}{transient}) eq get_workspace()
+      )
+      {
+      $x->MapWindow($event);
+      $x->ConfigureWindow($event,
+        stack_mode => $workspace eq 'sticky' ? 'Above' : 'Below');
+      $changedstate++;
+      }
+    return if $e{override_redirect};
+    $x->ConfigureWindow($event, stack_mode => 'Above');
+    $x->ConfigureWindow($window, x => 0, y => $labelheight);
+    $changedstate++;
+    }
+  }
 
 sub EVENT::UnmapNotify
-	{
-	if(exists $info{$event} && $info{$event}{child} == $window)
-		{
-		$x->UnmapWindow($event);
-		}
-	}
+  {
+  if(exists $info{$event} && $info{$event}{child} == $window)
+    {
+    $x->UnmapWindow($event);
+    }
+  }
 
 sub EVENT::MapRequest
-	{
-	return unless $e{parent} == $root;
-	return if grep $info{$_}{child} == $window, keys %info; # dup check
+  {
+  return unless $e{parent} == $root;
+  return if grep $info{$_}{child} == $window, keys %info; # dup check
 
-	# get original position
+  # get original position
 
-	my %attr = $x->GetGeometry($window);
-	my ($sx, $sy, $ww, $wh) = @attr{qw( x y width height )};
-	$sy = $root_geo{height} - $labelheight
-		if $sy > $root_geo{height} - $labelheight;
+  my %attr = $x->GetGeometry($window);
+  my ($sx, $sy, $ww, $wh) = @attr{qw( x y width height )};
+  $sy = $root_geo{height} - $labelheight
+    if $sy > $root_geo{height} - $labelheight;
 
-	# make decoration (wrapper frame) and reparent to it
+  # make decoration (wrapper frame) and reparent to it
 
-	$x->CreateWindow(my $deco = next_wid, $root,
-		'InputOutput', $x->root_depth, 'CopyFromParent',
-		($sx, $sy), $ww, $wh + $deltah, $config{frame_border},
-		bit_gravity => 'Static',
-		override_redirect => 1,
-		event_mask => $x->pack_event_mask( qw( Exposure SubstructureNotify
-			FocusChange EnterWindow ButtonPress ButtonRelease Button1Motion )),
-		);
-	$info{$deco}{x} = $sx;
-	$info{$deco}{y} = $sy;
-	$info{$deco}{width} = $ww;
-	$info{$deco}{height} = $wh + $deltah;
-	logger("Frame $deco created for $window.\n\n");
+  $x->CreateWindow(my $deco = next_wid, $root,
+    'InputOutput', $x->root_depth, 'CopyFromParent',
+    ($sx, $sy), $ww, $wh + $deltah, $config{frame_border},
+    bit_gravity => 'Static',
+    override_redirect => 1,
+    event_mask => $x->pack_event_mask( qw( Exposure SubstructureNotify
+      FocusChange EnterWindow ButtonPress ButtonRelease Button1Motion )),
+    );
+  $info{$deco}{x} = $sx;
+  $info{$deco}{y} = $sy;
+  $info{$deco}{width} = $ww;
+  $info{$deco}{height} = $wh + $deltah;
+  logger("Frame $deco created for $window.\n\n");
 
-	$x->ConfigureWindow($window, height => $wh, width => $ww,
-		border_width => 0);
-	$x->ChangeWindowAttributes($window,
-		event_mask => $x->pack_event_mask('PropertyChange'));
-	$x->ReparentWindow($window, $deco, 0, $labelheight);
-	$x->MapWindow($window);
-	$info{$deco}{child} = $window;
-	my ($title) = $x->GetProperty($window,
-		$x->atom('WM_NAME'), $x->atom('STRING'), 0, 100, 0);
-	$info{$deco}{title} = $title ||= sprintf 'RicksWM - %X', $window;
-	$info{$deco}{size} = textwidth($title);
-	downsize($deco);
+  $x->ConfigureWindow($window, height => $wh, width => $ww,
+    border_width => 0);
+  $x->ChangeWindowAttributes($window,
+    event_mask => $x->pack_event_mask('PropertyChange'));
+  $x->ReparentWindow($window, $deco, 0, $labelheight);
+  $x->MapWindow($window);
+  $info{$deco}{child} = $window;
+  my ($title) = $x->GetProperty($window,
+    $x->atom('WM_NAME'), $x->atom('STRING'), 0, 100, 0);
+  $info{$deco}{title} = $title ||= sprintf 'RicksWM - %X', $window;
+  $info{$deco}{size} = textwidth($title);
+  downsize($deco);
 
-	$x->ChangeProperty($deco, $x->atom('WM_NAME'),
-		$x->atom('STRING'), 8, 'Replace', $title);
+  $x->ChangeProperty($deco, $x->atom('WM_NAME'),
+    $x->atom('STRING'), 8, 'Replace', $title);
 
-	# move workspace property up to deco or default from root
+  # move workspace property up to deco or default from root
 
-	my $workspace = get_workspace($window);
-	$workspace = get_workspace unless length $workspace;
-	put_workspace($deco, $workspace);
-	$info{$deco}{workspace} = $workspace;
-	$x->ConfigureWindow($deco,
-		stack_mode => $workspace eq 'sticky' ? 'Above' : 'Below');
+  my $workspace = get_workspace($window);
+  $workspace = get_workspace unless length $workspace;
+  put_workspace($deco, $workspace);
+  $info{$deco}{workspace} = $workspace;
+  $x->ConfigureWindow($deco,
+    stack_mode => $workspace eq 'sticky' ? 'Above' : 'Below');
 
-	# set WM_TRANSIENT_FOR in deco if set in window
+  # set WM_TRANSIENT_FOR in deco if set in window
 
-	my ($transient) = $x->GetProperty($window,
-		$x->atom('WM_TRANSIENT_FOR'), $x->atom('WINDOW'), 0, 4, 0);
-	$transient = unpack 'L', $transient;
-	if($transient > 0)
-		{
-		$info{$deco}{transient} = $transient;
-		#open TRANS, '>>', 'log.transient';
-		#print TRANS "$deco transient for $transient\n";
-		#close TRANS;
-		}
-	$changedstate++;
-	}
+  my ($transient) = $x->GetProperty($window,
+    $x->atom('WM_TRANSIENT_FOR'), $x->atom('WINDOW'), 0, 4, 0);
+  $transient = unpack 'L', $transient;
+  if($transient > 0)
+    {
+    $info{$deco}{transient} = $transient;
+    #open TRANS, '>>', 'log.transient';
+    #print TRANS "$deco transient for $transient\n";
+    #close TRANS;
+    }
+  $changedstate++;
+  }
 
 __END__

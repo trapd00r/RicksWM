@@ -7,7 +7,7 @@ use strict;
 $| = 1;
 
 my ($server) = $ENV{DISPLAY} =~ /.*(:\d+)/ or
-	die "invalid DISPLAY env var <$ENV{DISPLAY}>";
+  die "invalid DISPLAY env var <$ENV{DISPLAY}>";
 my $filename = "/tmp/RicksWM.cmd$server";
 my $listname = "/tmp/RicksWM.state$server";
 my $colorfile = "$ENV{HOME}/.utilRKrc";
@@ -16,185 +16,185 @@ my (@lines, $workspace, @workspaces);
 help() unless @ARGV;
 
 sub fifo
-	{
-	s/\n*\z/\n/ for my $output = "@_";
-	-p $filename or die "$0: fifo $filename does not exist";
-	open my $fifo, '>', $filename or die "$0: $! on fifo open";
-	print $fifo $output;
-	close $fifo;
-	}
+  {
+  s/\n*\z/\n/ for my $output = "@_";
+  -p $filename or die "$0: fifo $filename does not exist";
+  open my $fifo, '>', $filename or die "$0: $! on fifo open";
+  print $fifo $output;
+  close $fifo;
+  }
 
 if(grep /^(list|newws|forward|backward|bottom|color)/, @ARGV)
-	{
-	open my $fh, $listname or die "$0: $! opening $listname";
-	($workspace, @lines) = <$fh>;
-	chomp $workspace;
-	@workspaces = sort grep ! /^sticky$/,
-		keys %{{map {/\t(.+?)\t/, 1} @lines, "\tmain\t"}};
-	}
+  {
+  open my $fh, $listname or die "$0: $! opening $listname";
+  ($workspace, @lines) = <$fh>;
+  chomp $workspace;
+  @workspaces = sort grep ! /^sticky$/,
+    keys %{{map {/\t(.+?)\t/, 1} @lines, "\tmain\t"}};
+  }
 
 while($_ = shift)
-	{
-	if( /^list\w+$/ )
-		{
-		'LIST'->$_();
-		}
-	elsif(
-		/^(movetocurrentws|raise|lower|setcurrentws|ws|bg|shieldstep|zoom)$/
-		&& @ARGV)
-		{
-		fifo "$_ @{[shift()]}\n";
-		}
-	elsif( /^color$/ && @ARGV)
-		{
-		my $color = shift;
-		my $data;
-		if(open my $f, '<', $colorfile)
-			{
-			local $/;
-			$data = <$f>;
-			close $f;
-			}
-		s/.*,$workspace\n//g for $data;
-		open my $f, '>', $colorfile;
-		print $f $data, "$color,$workspace\n";
-		close $f;
-		fifo "bg $color";
-		}
-	elsif( /^(raiseover)$/ && @ARGV > 1)
-		{
-		fifo $_, shift(), shift();
-		}
-	elsif( /^(lowerunder)$/ && @ARGV > 1)
-		{
-		fifo $_, shift(), shift();
-		}
-	elsif( /^(movetows)$/ && @ARGV > 1)
-		{
-		fifo $_, shift(), shift();
-		}
-	elsif( /^(xy)$/ && @ARGV > 2)
-		{
-		fifo $_, shift, shift, shift;
-		}
-	elsif( /^newws$/ )
-		{
-		my %ws = map { /\t(.+?)\t/, 1 } @lines;
-		my ($newws) = (grep(!$ws{$_}, 'ws01'..'ws99'), 'VeryLastName');
-		fifo "ws $newws";
-		}
-	elsif( /^forward$/ )
-		{
-		my %ws;
-		@ws{@workspaces} = @workspaces[1..$#workspaces, 0];
-		my $ws = $ws{$workspace} || 'main';
-		fifo "ws $ws";
-		}
-	elsif( /^backward$/ )
-		{
-		my %ws;
-		@ws{@workspaces} = @workspaces[-1..$#workspaces];
-		my $ws = $ws{$workspace} || 'main';
-		fifo "ws $ws";
-		}
-	elsif( /^bottom$/ )
-		{
-		my ($bottom) = map /^(\d+)\t$workspace\t/g, reverse @lines;
-		fifo "raise $bottom" if $bottom;
-		}
-	elsif( /^(stopkeys|solid|tabs|transparent|splash)$/ )
-		{
-		fifo $_;
-		}
-	elsif( /^(-h|--help)$/ )
-		{
-		help();
-		}
-	elsif( /^(-v|--version)$/ )
-		{
-		print "$0 $putilRK::VERSION\n";
-		}
-	else
-		{
-		warn "argument $_ is not valid";
-		help();
-		}
-	}
+  {
+  if( /^list\w+$/ )
+    {
+    'LIST'->$_();
+    }
+  elsif(
+    /^(movetocurrentws|raise|lower|setcurrentws|ws|bg|shieldstep|zoom)$/
+    && @ARGV)
+    {
+    fifo "$_ @{[shift()]}\n";
+    }
+  elsif( /^color$/ && @ARGV)
+    {
+    my $color = shift;
+    my $data;
+    if(open my $f, '<', $colorfile)
+      {
+      local $/;
+      $data = <$f>;
+      close $f;
+      }
+    s/.*,$workspace\n//g for $data;
+    open my $f, '>', $colorfile;
+    print $f $data, "$color,$workspace\n";
+    close $f;
+    fifo "bg $color";
+    }
+  elsif( /^(raiseover)$/ && @ARGV > 1)
+    {
+    fifo $_, shift(), shift();
+    }
+  elsif( /^(lowerunder)$/ && @ARGV > 1)
+    {
+    fifo $_, shift(), shift();
+    }
+  elsif( /^(movetows)$/ && @ARGV > 1)
+    {
+    fifo $_, shift(), shift();
+    }
+  elsif( /^(xy)$/ && @ARGV > 2)
+    {
+    fifo $_, shift, shift, shift;
+    }
+  elsif( /^newws$/ )
+    {
+    my %ws = map { /\t(.+?)\t/, 1 } @lines;
+    my ($newws) = (grep(!$ws{$_}, 'ws01'..'ws99'), 'VeryLastName');
+    fifo "ws $newws";
+    }
+  elsif( /^forward$/ )
+    {
+    my %ws;
+    @ws{@workspaces} = @workspaces[1..$#workspaces, 0];
+    my $ws = $ws{$workspace} || 'main';
+    fifo "ws $ws";
+    }
+  elsif( /^backward$/ )
+    {
+    my %ws;
+    @ws{@workspaces} = @workspaces[-1..$#workspaces];
+    my $ws = $ws{$workspace} || 'main';
+    fifo "ws $ws";
+    }
+  elsif( /^bottom$/ )
+    {
+    my ($bottom) = map /^(\d+)\t$workspace\t/g, reverse @lines;
+    fifo "raise $bottom" if $bottom;
+    }
+  elsif( /^(stopkeys|solid|tabs|transparent|splash)$/ )
+    {
+    fifo $_;
+    }
+  elsif( /^(-h|--help)$/ )
+    {
+    help();
+    }
+  elsif( /^(-v|--version)$/ )
+    {
+    print "$0 $putilRK::VERSION\n";
+    }
+  else
+    {
+    warn "argument $_ is not valid";
+    help();
+    }
+  }
 
 sub LIST::listall
-	{
-	for (@lines)
-		{
-		my ($id, $ws, $geo, $title) = split /\t/;
-		print "$0 raise $id #$title";
-		}
-	}
+  {
+  for (@lines)
+    {
+    my ($id, $ws, $geo, $title) = split /\t/;
+    print "$0 raise $id #$title";
+    }
+  }
 
 sub LIST::listallws
-	{
-	print "$0 ws '$_' #$_\n" for @workspaces;
-	}
+  {
+  print "$0 ws '$_' #$_\n" for @workspaces;
+  }
 
 sub LIST::listgeometry
-	{
-	for (@lines)
-		{
-		my ($id, $ws, $geo, $title) = split /\t/;
-		print "$0 raise $id ws '$ws' #$geo - $title";
-		}
-	}
+  {
+  for (@lines)
+    {
+    my ($id, $ws, $geo, $title) = split /\t/;
+    print "$0 raise $id ws '$ws' #$geo - $title";
+    }
+  }
 
 sub LIST::listcurrentws
-	{
-	print "$workspace\n";
-	}
+  {
+  print "$workspace\n";
+  }
 
 sub LIST::listincurrentws
-	{
-	for (@lines)
-		{
-		my ($id, $ws, $geo, $title) = split /\t/;
-		print "$0 raise $id #$title" if $ws eq $workspace;
-		}
-	}
+  {
+  for (@lines)
+    {
+    my ($id, $ws, $geo, $title) = split /\t/;
+    print "$0 raise $id #$title" if $ws eq $workspace;
+    }
+  }
 
 sub LIST::listwithws
-	{
-	for (@lines)
-		{
-		my ($id, $ws, $geo, $title) = split /\t/;
-		print "$0 raise $id ws '$ws' #$ws: $title";
-		}
-	}
+  {
+  for (@lines)
+    {
+    my ($id, $ws, $geo, $title) = split /\t/;
+    print "$0 raise $id ws '$ws' #$ws: $title";
+    }
+  }
 
 sub LIST::listnosticky
-	{
-	for (@lines)
-		{
-		my ($id, $ws, $geo, $title) = split /\t/;
-		print "$0 raise $id ws '$ws' #$ws: $title" unless $ws eq 'sticky';
-		}
-	}
+  {
+  for (@lines)
+    {
+    my ($id, $ws, $geo, $title) = split /\t/;
+    print "$0 raise $id ws '$ws' #$ws: $title" unless $ws eq 'sticky';
+    }
+  }
 
 sub LIST::listmoves
-	{
-	for (@lines)
-		{
-		my ($id, $ws, $geo, $title) = split /\t/;
-		next if $ws eq $workspace;
-		print "$0 movetocurrentws $id #$ws: $title";
-		}
-	}
+  {
+  for (@lines)
+    {
+    my ($id, $ws, $geo, $title) = split /\t/;
+    next if $ws eq $workspace;
+    print "$0 movetocurrentws $id #$ws: $title";
+    }
+  }
 
 sub LIST::AUTOLOAD
-	{
-	warn "unknown argument $_";
-	help();
-	}
+  {
+  warn "unknown argument $_";
+  help();
+  }
 
 sub help
-	{
-	print STDERR <<END;
+  {
+  print STDERR <<END;
 arguments are any of:
 
 listall             - list all windows in any workspace
@@ -230,7 +230,7 @@ splash              - show splash screen
 -v or --version
 -h or --help
 END
-	exit(1);
-	}
+  exit(1);
+  }
 
 __END__

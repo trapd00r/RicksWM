@@ -55,17 +55,17 @@ across => ['-3d', '-mr', 6, '-across'],
 '3d' => ['-3d'],
 task => ['-task'],
 notice => ['-notice', '#This', '#is', '#a', '#Notice',
-	"$0 #OK", "$0 #Cancel", ''],
+  "$0 #OK", "$0 #Cancel", ''],
 midscreen => ['-3d', '-midscreen'],
 fitx => ['-3d', '-fitx', '-vpad', 0, '-or', '-wide', '-north',
-	'-border', 0, '-shape', '-across'],
+  '-border', 0, '-shape', '-across'],
 ifitx => ['-3d', '-center', '-ifitx', '-or', '-wide', '-north',
-	'-border', 0, '-shape', '-across'],
+  '-border', 0, '-shape', '-across'],
 ifitxfade => [qw(-center -ifitx -or -wide -north -border 0 -vpad 0
-	-ipad 6 -hpad 20 -across -slide 0 -500
-	-shape -fade -bg red -fg white -active black white -slantbg black)],
+  -ipad 6 -hpad 20 -across -slide 0 -500
+  -shape -fade -bg red -fg white -active black white -slantbg black)],
 north => ['-3d', '-or', '-wide', '-north', '-border', 0, '-shape', '-across',
-	'-slide', -2000, -1000],
+  '-slide', -2000, -1000],
 east => [qw(-task -or -east -shape -vpad 9 -gap 0)],
 south => ['-3d', '-or', '-wide', '-south', '-slantbg', 'black', '-across'],
 west => [qw(-task -or -west -slide -500 0)],
@@ -75,32 +75,32 @@ slant => ['-3d', '-slant', 10],
 depress => ['-3d', '-depress', 2],
 oval => [qw(-oval -hpad 20 -ipad 10 -center -bg red -fg white -slantbg black)],
 round => [qw(-round -hpad 10 -ipad 17 -center -gap 37 -vpad 27
-	-bg red -fg white -slantbg black)],
+  -bg red -fg white -slantbg black)],
 roundfade => [qw(-fade -round -hpad 10 -ipad 17 -center -gap 37 -vpad 27
-	-bg red -fg white -slantbg black)],
+  -bg red -fg white -slantbg black)],
 roundfadeshape => [qw(-shape -or -midscreen -fade -round -hpad 30 -ipad 17
-	-center -gap 30 -vpad 40
-	-bg red -fg white -active black yellow -slantbg black)],
+  -center -gap 30 -vpad 40
+  -bg red -fg white -active black yellow -slantbg black)],
 glop => [qw(-shape -or -midscreen -fade -round
-	-hpad 25 -ipad 30 -center -gap 10 -vpad 30
-	-bg red -fg white -active black yellow -slantbg black)],
+  -hpad 25 -ipad 30 -center -gap 10 -vpad 30
+  -bg red -fg white -active black yellow -slantbg black)],
 solidglop => [qw(-shape -or -midscreen -round
-	-hpad 25 -ipad 30 -center -gap 10 -vpad 30
-	-bg red -fg white -active black yellow -slantbg black)],
+  -hpad 25 -ipad 30 -center -gap 10 -vpad 30
+  -bg red -fg white -active black yellow -slantbg black)],
 fade => [qw(-fade -bg red -fg white -active black cyan -slantbg black
-	-center -ipad 15 -hpad 20)],
+  -center -ipad 15 -hpad 20)],
 ovalfade => [qw(-midscreen -oval -fade -bg red -fg white
-	-active black cyan -slantbg black -center -ipad 25 -hpad 20)],
+  -active black cyan -slantbg black -center -ipad 25 -hpad 20)],
 'or' => [qw(-or -shape -midscreen -oval -fade -bg red -fg white
-	-active black cyan -slantbg black -center -ipad 15 -hpad 20
-		-gap 30 -vpad 30)],
+  -active black cyan -slantbg black -center -ipad 15 -hpad 20
+    -gap 30 -vpad 30)],
 shape => ['-shape'],
 onlyshape => [qw(-shape -round -fade -hpad 25 -center -ipad 12
-	-gap 10 -vpad 10
-	-bg white -fg black -active white red -slantbg black)],
+  -gap 10 -vpad 10
+  -bg white -fg black -active white red -slantbg black)],
 dial => [qw(-dial 350 -or -shape -midscreen -oval -fade
-	-bg red -fg white -active black cyan -slantbg black
-		-center -ipad 70 -hpad 10), @basic[0..10], ' #Exit', ''],
+  -bg red -fg white -active black cyan -slantbg black
+    -center -ipad 70 -hpad 10), @basic[0..10], ' #Exit', ''],
 blue => [qw(-fg white -bg blue2 -mr 20 -midscreen)],
 fixed => [qw(-center -fn fixed -midscreen -bg white -fg black)],
 );
@@ -111,10 +111,10 @@ my @title = $arg ? ('-t', "Example of $arg") : ();
 
 my @args = exists($options{$arg}) ? @{$options{$arg}} : ();
 if(@args > 1 && $args[-1] eq '')
-	{
-	pop @args;
-	@basic = ();
-	}
+  {
+  pop @args;
+  @basic = ();
+  }
 exec $menu, @title, @args, @basic;
 
 __END__
